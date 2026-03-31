@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mission Biodiversity Airbus | Escape Room</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@700;800&display=swap');
+    :root{
+      --bg:#071629;
+      --panel:#0d223f;
+      --panel2:#122b4f;
+      --soft:#eef6ff;
+      --muted:#a7bdd8;
+      --line:rgba(255,255,255,.09);
+      --cyan:#6ce3ff;
+      --green:#79f2b2;
+      --green2:#59c08f;
+      --gold:#ffd78c;
+      --danger:#ff8d9b;
+      --ok:#84f3b7;
+      --shadow:0 28px 70px rgba(0,0,0,.34);
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;font-family:Inter,Arial,sans-serif;background:
+      radial-gradient(circle at top left, rgba(108,227,255,.14), transparent 20%),
+      radial-gradient(circle at 90% 10%, rgba(121,242,178,.12), transparent 18%),
+      linear-gradient(180deg,#061225 0%, #071629 45%, #081a31 100%);
+      color:#f3f8ff;min-height:100%;}
+    body::before{content:"";position:fixed;inset:0;pointer-events:none;background:
+      linear-gradient(rgba(255,255,255,.018) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.018) 1px, transparent 1px);
+      background-size:34px 34px;opacity:.28}
+    .shell{max-width:1380px;margin:0 auto;padding:14px 18px 40px;position:relative;z-index:1}
+    .topbar{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:18px 24px;border-radius:24px;background:rgba(7,20,42,.78);border:1px solid var(--line);backdrop-filter:blur(14px);box-shadow:0 18px 40px rgba(0,0,0,.24);position:sticky;top:14px;z-index:10}
+    .brand{display:flex;gap:16px;align-items:center}
+    .brand-mark{width:44px;height:44px;border-radius:16px;background:linear-gradient(135deg,var(--cyan),var(--green));display:grid;place-items:center;color:#05233a;font-weight:900}
+    .brand-copy strong{display:block;font-family:Manrope,Inter,sans-serif;font-size:20px;letter-spacing:-.03em}
+    .brand-copy span{display:block;color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.18em;font-weight:800}
+    .topnav{display:flex;gap:10px;flex-wrap:wrap}
+    .chip,.ghost-chip{padding:10px 14px;border-radius:999px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.14em;border:1px solid var(--line)}
+    .chip{background:rgba(255,255,255,.08);color:#fff}
+    .ghost-chip{background:rgba(255,255,255,.04);color:var(--muted)}
+    .screen{display:none;margin-top:20px}
+    .screen.active{display:block}
+    .card{background:linear-gradient(180deg, rgba(14,34,63,.9), rgba(9,22,44,.94));border:1px solid var(--line);border-radius:32px;box-shadow:var(--shadow);overflow:hidden}
+    .hero{display:grid;grid-template-columns:1.03fr .97fr;min-height:720px}
+    .hero-copy{padding:64px 54px 56px}
+    .eyebrow{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.22em;color:#97cbff}
+    h1,h2,h3,h4{font-family:Manrope,Inter,sans-serif;letter-spacing:-.04em;margin:0}
+    .hero h1{font-size:86px;line-height:.9;margin:16px 0 18px;max-width:620px}
+    .hero p{font-size:19px;line-height:1.8;color:rgba(243,248,255,.83);max-width:600px}
+    .actions{display:flex;gap:14px;flex-wrap:wrap;margin-top:28px}
+    button{font:inherit}
+    .btn{border:0;border-radius:18px;padding:15px 22px;font-weight:800;cursor:pointer;transition:.18s ease;box-shadow:0 18px 34px rgba(0,0,0,.16)}
+    .btn:hover{transform:translateY(-2px)}
+    .btn-primary{background:linear-gradient(135deg,var(--green),#c6ffd8);color:#073548}
+    .btn-secondary{background:linear-gradient(135deg,rgba(255,255,255,.16),rgba(255,255,255,.08));color:#fff;border:1px solid rgba(255,255,255,.12)}
+    .btn-ghost{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);color:var(--muted)}
+    .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:34px}
+    .stat{padding:18px;border-radius:22px;background:linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,255,255,.05));border:1px solid rgba(255,255,255,.08)}
+    .stat strong{display:block;font-size:32px;line-height:.95}
+    .stat span{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.18em;color:var(--muted);margin-top:8px;font-weight:700}
+    .hero-visual{padding:38px;display:flex;align-items:center;justify-content:center}
+    .dashboard{width:100%;max-width:590px;display:grid;grid-template-columns:1.05fr .95fr;gap:18px}
+    .main-panel,.side-card{border-radius:28px;border:1px solid rgba(255,255,255,.08);overflow:hidden;position:relative}
+    .main-panel{min-height:560px;background:
+      radial-gradient(circle at 60% 18%, rgba(255,215,140,.28), transparent 14%),
+      radial-gradient(circle at 20% 82%, rgba(121,242,178,.20), transparent 20%),
+      linear-gradient(180deg, rgba(3,11,25,.06), rgba(3,11,25,.28)),
+      repeating-linear-gradient(90deg, rgba(21,68,40,.42) 0 12px, rgba(39,98,55,.18) 12px 26px),
+      linear-gradient(180deg,#244d39 0%,#132219 100%);
+      box-shadow:0 22px 48px rgba(0,0,0,.28),0 0 28px rgba(108,227,255,.16)}
+    .main-panel::before{content:"";position:absolute;inset:26px;border-radius:30px;border:1px solid rgba(255,255,255,.14)}
+    .mission-core{position:absolute;left:50%;top:45%;transform:translate(-50%,-50%);width:250px;height:250px;border-radius:50%;display:grid;place-items:center}
+    .mission-core::before{content:"";position:absolute;inset:16px;border-radius:50%;border:1px solid rgba(255,255,255,.18);box-shadow:0 0 24px rgba(108,227,255,.22)}
+    .orb{width:118px;height:118px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 40% 35%, rgba(255,255,255,.8), rgba(108,227,255,.46) 34%, rgba(15,67,102,.6) 72%, rgba(255,255,255,.06));box-shadow:0 0 36px rgba(108,227,255,.34);font-size:34px}
+    .hud{position:absolute;left:22px;top:22px;display:flex;gap:8px;flex-wrap:wrap}
+    .hud span{padding:8px 10px;border-radius:999px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.12);font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.14em}
+    .mission-copy{position:absolute;left:24px;right:24px;bottom:24px}
+    .mini{display:inline-flex;padding:7px 10px;border-radius:999px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.12);font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.14em;margin-bottom:12px}
+    .mission-copy h3{font-size:36px;line-height:.95;margin-bottom:10px}
+    .mission-copy p{margin:0;color:rgba(255,255,255,.82);font-size:14px;line-height:1.7}
+    .stack{display:grid;gap:18px}
+    .side-card{min-height:271px;padding:24px;background:linear-gradient(180deg,rgba(255,255,255,.14),rgba(255,255,255,.06));display:flex;flex-direction:column;justify-content:flex-end}
+    .side-icon{width:54px;height:54px;border-radius:18px;background:rgba(255,255,255,.16);display:grid;place-items:center;margin-bottom:16px;font-size:22px}
+    .side-card h4{font-size:28px;margin-bottom:8px}
+    .side-card p{margin:0;color:rgba(243,248,255,.76);line-height:1.7}
+    .mission-layout{display:grid;grid-template-columns:320px 1fr;gap:18px;align-items:start}
+    .sidebar{padding:22px;border-radius:28px;background:linear-gradient(180deg,rgba(11,27,49,.92),rgba(7,18,35,.96));border:1px solid var(--line);box-shadow:var(--shadow);position:sticky;top:100px}
+    .sidebar h3{font-size:26px;margin-bottom:14px}
+    .sidebar p{margin:0 0 20px;color:var(--muted);line-height:1.75}
+    .room-list{display:grid;gap:12px}
+    .room-item{padding:14px 16px;border-radius:20px;border:1px solid var(--line);background:rgba(255,255,255,.05);cursor:pointer;transition:.16s}
+    .room-item:hover{transform:translateY(-2px)}
+    .room-item.active{background:linear-gradient(135deg,rgba(121,242,178,.18),rgba(108,227,255,.12));border-color:rgba(121,242,178,.28)}
+    .room-item strong{display:block;font-size:15px;letter-spacing:-.02em}
+    .room-item span{display:block;margin-top:7px;font-size:12px;color:var(--muted);line-height:1.5}
+    .clue-panel{margin-top:18px;padding:16px;border-radius:22px;background:rgba(255,255,255,.04);border:1px solid var(--line)}
+    .clues{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+    .clue{padding:8px 11px;border-radius:14px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.12);font-size:12px;font-weight:800;letter-spacing:.08em}
+    .workspace{padding:22px;border-radius:28px;background:linear-gradient(180deg,rgba(10,25,48,.92),rgba(7,18,35,.96));border:1px solid var(--line);box-shadow:var(--shadow)}
+    .workspace-head{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;margin-bottom:18px}
+    .workspace-head h2{font-size:42px;line-height:.94;margin-top:8px}
+    .workspace-head p{max-width:760px;color:var(--muted);line-height:1.8}
+    .room-tags{display:flex;gap:10px;flex-wrap:wrap}
+    .room-tags .chip{background:rgba(255,255,255,.06)}
+    .progress{height:12px;border-radius:999px;background:rgba(255,255,255,.07);overflow:hidden;margin:10px 0 20px}
+    .progress > div{height:100%;background:linear-gradient(90deg,var(--green),var(--cyan))}
+    .panel{padding:22px;border-radius:26px;background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.04));border:1px solid rgba(255,255,255,.08)}
+    .panel h3{font-size:28px;margin-bottom:8px}
+    .panel p,.panel li{color:rgba(243,248,255,.82);line-height:1.7}
+    .panel ul{margin:12px 0 0 18px;padding:0}
+    .grid-2,.grid-3,.grid-4{display:grid;gap:16px}
+    .grid-2{grid-template-columns:repeat(2,1fr)}
+    .grid-3{grid-template-columns:repeat(3,1fr)}
+    .grid-4{grid-template-columns:repeat(4,1fr)}
+    .select-card{padding:18px;border-radius:22px;border:1px solid rgba(255,255,255,.08);background:linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,255,255,.04));cursor:pointer;transition:.16s;position:relative;min-height:135px}
+    .select-card:hover{transform:translateY(-3px);border-color:rgba(108,227,255,.32)}
+    .select-card.selected{outline:2px solid rgba(121,242,178,.52);background:linear-gradient(180deg,rgba(121,242,178,.16),rgba(108,227,255,.08))}
+    .select-card.correct{outline:2px solid rgba(132,243,183,.65)}
+    .select-card.incorrect{outline:2px solid rgba(255,141,155,.62)}
+    .label{display:inline-flex;padding:7px 10px;border-radius:999px;background:rgba(255,255,255,.12);font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.16em;margin-bottom:12px;color:#fff}
+    .small{font-size:13px;color:var(--muted);line-height:1.6}
+    .room-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px}
+    .status{padding:16px 18px;border-radius:18px;margin-top:16px;font-weight:700;line-height:1.7;border:1px solid transparent}
+    .status.ok{background:rgba(88,192,143,.16);border-color:rgba(88,192,143,.24);color:#dafde8}
+    .status.ko{background:rgba(255,141,155,.12);border-color:rgba(255,141,155,.20);color:#ffe4e7}
+    .pair-board{display:grid;gap:14px}
+    .pair-row{display:grid;grid-template-columns:1.1fr 1fr auto;gap:12px;align-items:center;padding:14px;border-radius:18px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.06)}
+    select{width:100%;padding:12px 14px;border-radius:14px;background:#08182f;color:#fff;border:1px solid rgba(255,255,255,.14);font:inherit}
+    .species-board,.action-board{display:grid;gap:14px}
+    .species-row,.action-row{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:12px;align-items:start;padding:14px;border-radius:18px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.06)}
+    .species-name,.action-name{font-weight:700}
+    .matrix{display:grid;gap:14px;margin-top:12px}
+    .matrix-item{padding:18px;border-radius:22px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.07)}
+    .matrix-item h4{font-size:20px;margin-bottom:8px}
+    .checkbox-list{display:grid;gap:10px;margin-top:12px}
+    .checkbox{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border-radius:16px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06)}
+    .checkbox input{margin-top:4px;transform:scale(1.15)}
+    .results{display:grid;grid-template-columns:1.03fr .97fr;gap:18px}
+    .score-card{padding:26px;border-radius:30px;background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.04));border:1px solid rgba(255,255,255,.08)}
+    .score-big{font-size:118px;line-height:.85;font-family:Manrope,Inter,sans-serif;letter-spacing:-.08em;margin:10px 0}
+    .level{font-size:28px;color:var(--green);font-weight:800}
+    .footnote{color:var(--muted);font-size:13px;line-height:1.7;margin-top:14px}
+    .summary-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+    .summary-card{padding:18px;border-radius:22px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.06)}
+    @media (max-width:1100px){
+      .hero,.mission-layout,.results{grid-template-columns:1fr}
+      .hero h1{font-size:58px}
+      .workspace-head h2{font-size:34px}
+      .stats{grid-template-columns:repeat(2,1fr)}
+      .grid-2,.grid-3,.grid-4,.summary-grid{grid-template-columns:1fr}
+      .species-row,.action-row,.pair-row{grid-template-columns:1fr}
+      .sidebar{position:static}
+    }
+    @media (max-width:720px){
+      .shell{padding:10px 10px 30px}
+      .topbar{padding:14px 16px;border-radius:20px}
+      .hero-copy{padding:38px 24px 30px}
+      .hero h1{font-size:46px}
+      .hero p{font-size:17px}
+      .hero-visual{padding:20px}
+      .workspace{padding:16px}
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark">✦</div>
+        <div class="brand-copy">
+          <span>Airbus biodiversity mission</span>
+          <strong>Mission Biodiversity Escape Room</strong>
+        </div>
+      </div>
+      <nav class="topnav">
+        <div class="chip" id="navStage">Home</div>
+        <div class="ghost-chip" id="navContext">Green Corridor</div>
+      </nav>
+    </header>
+
+    <section class="screen active" id="screen-home">
+      <div class="hero card">
+        <div class="hero-copy">
+          <div class="eyebrow">Interactive biodiversity challenge</div>
+          <h1>Mission Biodiversity.<br>Restore balance.</h1>
+          <p>A premium escape-room experience for Airbus teams. Solve five interconnected biodiversity challenges, unlock the secret clues and reactivate the Green Corridor around the Getafe site.</p>
+          <div class="actions">
+            <button class="btn btn-primary" id="btnStart">Start mission</button>
+            <button class="btn btn-secondary" id="btnIntro">View mission brief</button>
+          </div>
+          <div class="stats">
+            <div class="stat"><strong>5</strong><span>themed rooms</span></div>
+            <div class="stat"><strong>60</strong><span>minutes of play</span></div>
+            <div class="stat"><strong>4–6</strong><span>players per team</span></div>
+            <div class="stat"><strong>1</strong><span>final restoration code</span></div>
+          </div>
+        </div>
+        <div class="hero-visual">
+          <div class="dashboard">
+            <div class="main-panel">
+              <div class="hud"><span>Mission mode</span><span>5 clues</span><span>Green Corridor</span></div>
+              <div class="mission-core"><div class="orb">🌿</div></div>
+              <div class="mission-copy">
+                <span class="mini">Industrial biodiversity</span>
+                <h3>Learn through action, solve as a team</h3>
+                <p>From habitat loss and invisible pollution to ecological balance and anti-greenwashing decisions, each room converts biodiversity learning into a collaborative challenge.</p>
+              </div>
+            </div>
+            <div class="stack">
+              <div class="side-card">
+                <div class="side-icon">🧩</div>
+                <h4>Five rooms</h4>
+                <p>Habitat loss, invisible pollution, species detectives, ecosystem balance and real action vs greenwashing.</p>
+              </div>
+              <div class="side-card">
+                <div class="side-icon">🔐</div>
+                <h4>Unlock the code</h4>
+                <p>Each completed room reveals one clue. Collect them all to generate your final biodiversity restoration keyword.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen" id="screen-mission">
+      <div class="mission-layout">
+        <aside class="sidebar">
+          <div class="eyebrow">Mission progress</div>
+          <h3>Escape room control deck</h3>
+          <p>Your task is to stop biodiversity loss around Airbus Getafe by solving five connected challenges. Each completed room reveals a clue.</p>
+          <div class="room-list" id="roomList"></div>
+          <div class="clue-panel">
+            <div class="eyebrow">Unlocked clues</div>
+            <div class="clues" id="clues"></div>
+          </div>
+        </aside>
+
+        <main class="workspace">
+          <div class="workspace-head">
+            <div>
+              <div class="eyebrow" id="roomEyebrow">Mission brief</div>
+              <h2 id="roomTitle">Welcome to the operation</h2>
+              <p id="roomDescription">Read the challenge carefully, solve it as a team and validate your answer to unlock the clue.</p>
+            </div>
+            <div class="room-tags" id="roomTags"></div>
+          </div>
+          <div class="progress"><div id="progressBar" style="width:0%"></div></div>
+          <div id="roomContent"></div>
+        </main>
+      </div>
+    </section>
+
+    <section class="screen" id="screen-results">
+      <div class="results">
+        <div class="score-card card">
+          <div class="eyebrow">Mission completed</div>
+          <h2 style="font-size:52px;line-height:.94;margin-top:10px">Green Corridor restored</h2>
+          <div class="score-big" id="scoreValue">5/5</div>
+          <div class="level" id="scoreLevel">Biodiversity restoration team</div>
+          <p id="scoreText" style="max-width:660px;line-height:1.9;color:rgba(243,248,255,.82)">You solved the five biodiversity rooms and rebuilt a coherent restoration pathway for the site.</p>
+          <div class="actions">
+            <button class="btn btn-primary" id="btnRestart">Play again</button>
+            <button class="btn btn-secondary" id="btnBackMission">Review mission</button>
+          </div>
+          <div class="footnote">This English version is built from the project’s historical escape-room structure and facilitator manual so you can keep a dedicated EN version for the English Biodiverso community.</div>
+        </div>
+        <div class="card" style="padding:24px">
+          <div class="eyebrow">Final summary</div>
+          <h3 style="font-size:34px;margin:8px 0 16px">Unlocked restoration code</h3>
+          <div class="panel" style="margin-bottom:16px">
+            <div class="small">Secret keyword</div>
+            <div id="finalCode" style="font-size:54px;font-family:Manrope,Inter,sans-serif;letter-spacing:-.06em;margin-top:8px">VERDE</div>
+          </div>
+          <div class="summary-grid" id="summaryGrid"></div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const rooms = [
+      {
+        id: 1,
+        key: 'H',
+        title: 'Room 1 · Habitat loss',
+        eyebrow: 'Rank the pressure',
+        tags: ['Human impact', 'Site context', 'Numeric clue'],
+        description: 'Order human actions from highest to lowest biodiversity impact. The three most harmful actions generate the numeric code for this room.',
+        hint: 'Think about fragmentation, sealing and direct habitat removal before restorative actions.',
+        render: renderRoom1,
+        validate: validateRoom1,
+      },
+      {
+        id: 2,
+        key: 'A',
+        title: 'Room 2 · Invisible pollution',
+        eyebrow: 'Match cause and effect',
+        tags: ['Noise', 'Light', 'Chemicals'],
+        description: 'Connect each pollution type with the biodiversity effect it most directly causes. Three correct combinations unlock the clue.',
+        hint: 'Match the most direct ecological effect, not a general environmental issue.',
+        render: renderRoom2,
+        validate: validateRoom2,
+      },
+      {
+        id: 3,
+        key: 'B',
+        title: 'Room 3 · Biodiversity detectives',
+        eyebrow: 'Classify the species',
+        tags: ['Native', 'Exotic', 'Invasive'],
+        description: 'Classify species and identify whether their estimated ecological effect is positive, neutral or negative. Four correct identifications are enough to progress.',
+        hint: 'Native species adapted to the region often support local ecological relationships better.',
+        render: renderRoom3,
+        validate: validateRoom3,
+      },
+      {
+        id: 4,
+        key: 'I',
+        title: 'Room 4 · Ecosystem in balance',
+        eyebrow: 'Rebuild the web',
+        tags: ['Ecological links', 'Species roles', 'Habitat function'],
+        description: 'Select the ecological relationships that would make the ecosystem functional and realistic. At least five key links are needed.',
+        hint: 'Look for realistic relations involving pollination, refuge, pest control and water dependence.',
+        render: renderRoom4,
+        validate: validateRoom4,
+      },
+      {
+        id: 5,
+        key: 'T',
+        title: 'Room 5 · The solution is in our hands',
+        eyebrow: 'Real action vs greenwashing',
+        tags: ['Action plan', 'Real impact', 'Greenwashing filter'],
+        description: 'Choose the six actions that truly help biodiversity and discard the symbolic or misleading ones. The selected actions reveal the last clue.',
+        hint: 'Prefer habitat improvement, training and ecological management over cosmetic gestures.',
+        render: renderRoom5,
+        validate: validateRoom5,
+      }
+    ];
+
+    const room1Data = [
+      { text: 'Urbanisation of a natural patch', impact: 5 },
+      { text: 'Soil sealing and hard paving', impact: 4 },
+      { text: 'Eliminating spontaneous vegetation', impact: 3 },
+      { text: 'Introducing diverse native green areas', impact: 2 },
+      { text: 'Ecological restoration and reforestation', impact: 1 }
+    ];
+
+    const room2Data = [
+      { pollution: 'Noise pollution', correct: 'Disturbs fauna communication, orientation and breeding behaviour' },
+      { pollution: 'Light pollution', correct: 'Disrupts circadian rhythms, nocturnal activity and insect behaviour' },
+      { pollution: 'Chemical pollution', correct: 'Damages plants, soil life and non-target organisms through contamination' }
+    ];
+    const room2Options = [
+      'Disturbs fauna communication, orientation and breeding behaviour',
+      'Disrupts circadian rhythms, nocturnal activity and insect behaviour',
+      'Damages plants, soil life and non-target organisms through contamination',
+      'Creates more habitat connectivity',
+      'Improves pollination automatically'
+    ];
+
+    const room3Data = [
+      { species: 'Holm oak (Quercus ilex)', type: 'Native', impact: 'Positive', note: 'Mediterranean tree that provides food and refuge.' },
+      { species: 'Iberian honey bee', type: 'Native', impact: 'Positive', note: 'Key pollinator in local ecological networks.' },
+      { species: 'Decorative palm introduced in landscaped areas', type: 'Exotic non-invasive', impact: 'Neutral', note: 'Introduced species with limited local ecological value in this context.' },
+      { species: 'Ruddy duck in a protected wetland context', type: 'Invasive', impact: 'Negative', note: 'Introduced species with significant ecological pressure in Europe.' },
+      { species: 'Common swallow', type: 'Native', impact: 'Positive', note: 'Linked to environmental quality and insect availability.' },
+      { species: 'Tree of heaven (Ailanthus altissima)', type: 'Invasive', impact: 'Negative', note: 'Highly invasive in many urban and peri-urban settings.' }
+    ];
+    const room3TypeOptions = ['Native', 'Exotic non-invasive', 'Invasive'];
+    const room3ImpactOptions = ['Positive', 'Neutral', 'Negative'];
+
+    const room4Data = [
+      { text: 'The Iberian bee pollinates the field thistle.', correct: true },
+      { text: 'The temporary pond supports the natterjack toad.', correct: true },
+      { text: 'The dry-stone wall provides refuge to small fauna.', correct: true },
+      { text: 'The bat helps regulate mosquito populations.', correct: true },
+      { text: 'The holm oak offers food and shelter to many species.', correct: true },
+      { text: 'The red fox pollinates the iris.', correct: false },
+      { text: 'The swallow depends directly on asphalt for nesting habitat.', correct: false },
+      { text: 'Chemical overuse increases biodiversity resilience.', correct: false }
+    ];
+
+    const room5Data = [
+      { text: 'Plant native species adapted to the local climate', correct: true },
+      { text: 'Install insect hotels in landscaped areas', correct: true },
+      { text: 'Remove invasive species from green spaces', correct: true },
+      { text: 'Preserve old structures and cavities as fauna shelters', correct: true },
+      { text: 'Reduce the use of pesticides and chemical fertilisers', correct: true },
+      { text: 'Train workers on local biodiversity', correct: true },
+      { text: 'Paint animal murals on external walls', correct: false },
+      { text: 'Launch a photo campaign with wildlife images only', correct: false },
+      { text: 'Label sealed asphalt areas as green zones', correct: false },
+      { text: 'Use decorative exotic palms as a biodiversity symbol', correct: false },
+      { text: 'Place unrelated indoor plants as the main action', correct: false },
+      { text: 'Clean outdoor areas with scented “eco” products and call it restoration', correct: false }
+    ];
+
+    const state = {
+      currentRoom: 1,
+      solved: {},
+      clues: [],
+      roomStatus: {}
+    };
+
+    const screenHome = document.getElementById('screen-home');
+    const screenMission = document.getElementById('screen-mission');
+    const screenResults = document.getElementById('screen-results');
+    const navStage = document.getElementById('navStage');
+    const navContext = document.getElementById('navContext');
+
+    function setScreen(name){
+      [screenHome, screenMission, screenResults].forEach(el => el.classList.remove('active'));
+      if(name === 'home') screenHome.classList.add('active');
+      if(name === 'mission') screenMission.classList.add('active');
+      if(name === 'results') screenResults.classList.add('active');
+      navStage.textContent = name === 'home' ? 'Home' : name === 'mission' ? 'Mission' : 'Results';
+      navContext.textContent = name === 'mission' ? rooms.find(r => r.id === state.currentRoom).title : 'Green Corridor';
+    }
+
+    function updateSidebar(){
+      const list = document.getElementById('roomList');
+      list.innerHTML = '';
+      rooms.forEach(room => {
+        const div = document.createElement('div');
+        div.className = 'room-item' + (room.id === state.currentRoom ? ' active' : '');
+        div.innerHTML = `<strong>${room.title}</strong><span>${state.solved[room.id] ? 'Solved · clue unlocked' : 'Pending room'}</span>`;
+        div.onclick = () => { state.currentRoom = room.id; renderMission(); };
+        list.appendChild(div);
+      });
+      const clues = document.getElementById('clues');
+      clues.innerHTML = state.clues.length ? state.clues.map(c => `<div class="clue">${c}</div>`).join('') : '<div class="small">No clues unlocked yet.</div>';
+      document.getElementById('progressBar').style.width = `${(state.clues.length / rooms.length) * 100}%`;
+    }
+
+    function renderMission(){
+      setScreen('mission');
+      updateSidebar();
+      const room = rooms.find(r => r.id === state.currentRoom);
+      document.getElementById('roomEyebrow').textContent = room.eyebrow;
+      document.getElementById('roomTitle').textContent = room.title;
+      document.getElementById('roomDescription').textContent = room.description;
+      const tags = document.getElementById('roomTags');
+      tags.innerHTML = room.tags.map(tag => `<div class="chip">${tag}</div>`).join('');
+      const content = document.getElementById('roomContent');
+      content.innerHTML = '';
+      room.render(content);
+    }
+
+    function unlockRoom(roomId){
+      if(!state.solved[roomId]){
+        state.solved[roomId] = true;
+        const room = rooms.find(r => r.id === roomId);
+        state.clues.push(room.key);
+      }
+      updateSidebar();
+      if(state.clues.length === rooms.length){
+        renderResults();
+      }
+    }
+
+    function renderStatus(container, ok, html){
+      let status = container.querySelector('.status');
+      if(!status){
+        status = document.createElement('div');
+        container.appendChild(status);
+      }
+      status.className = `status ${ok ? 'ok' : 'ko'}`;
+      status.innerHTML = html;
+    }
+
+    function renderRoom1(target){
+      const panel = document.createElement('div');
+      panel.className = 'panel';
+      panel.innerHTML = `
+        <h3>Order actions from highest to lowest biodiversity impact</h3>
+        <p>The three most harmful actions generate the code. Assign a rank from <strong>1</strong> (highest impact) to <strong>5</strong> (lowest impact / restorative).</p>
+        <div class="pair-board" id="room1Board"></div>
+        <div class="room-actions">
+          <button class="btn btn-primary" id="validateRoom1">Validate order</button>
+        </div>
+      `;
+      target.appendChild(panel);
+      const board = panel.querySelector('#room1Board');
+      room1Data.forEach((item, index) => {
+        const row = document.createElement('div');
+        row.className = 'pair-row';
+        row.innerHTML = `
+          <div><div class="label">Action ${index + 1}</div><div class="species-name">${item.text}</div></div>
+          <div>
+            <select data-index="${index}">
+              <option value="">Choose rank…</option>
+              <option value="1">1 · Highest impact</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5 · Lowest impact / restorative</option>
+            </select>
+          </div>
+          <div class="small">Use each rank only once.</div>
+        `;
+        board.appendChild(row);
+      });
+      panel.querySelector('#validateRoom1').onclick = () => validateRoom1(panel);
+    }
+
+    function validateRoom1(panel){
+      const values = [...panel.querySelectorAll('select')].map(s => Number(s.value));
+      if(values.some(v => !v)) return renderStatus(panel, false, 'Complete all rankings before validating.');
+      const unique = new Set(values);
+      if(unique.size !== values.length) return renderStatus(panel, false, 'Each rank must be used only once.');
+      const correct = values.every((v, i) => v === room1Data[i].impact);
+      if(correct){
+        unlockRoom(1);
+        renderStatus(panel, true, 'Correct. The impact order is valid. The room clue is <strong>H</strong>.');
+      } else {
+        renderStatus(panel, false, 'Not yet. Review which actions destroy or fragment habitat more directly than restorative measures.');
+      }
+    }
+
+    function renderRoom2(target){
+      const panel = document.createElement('div');
+      panel.className = 'panel';
+      panel.innerHTML = `
+        <h3>Match each pollution type with its biodiversity effect</h3>
+        <p>Only the direct ecological match counts. Three correct combinations unlock the clue.</p>
+        <div class="pair-board" id="room2Board"></div>
+        <div class="room-actions"><button class="btn btn-primary" id="validateRoom2">Validate matches</button></div>
+      `;
+      target.appendChild(panel);
+      const board = panel.querySelector('#room2Board');
+      room2Data.forEach((item, index) => {
+        const row = document.createElement('div');
+        row.className = 'pair-row';
+        const options = room2Options.map(o => `<option value="${o.replace(/"/g,'&quot;')}">${o}</option>`).join('');
+        row.innerHTML = `
+          <div><div class="label">Pollution</div><div class="species-name">${item.pollution}</div></div>
+          <div><select data-index="${index}"><option value="">Choose the effect…</option>${options}</select></div>
+          <div class="small">Think about fauna, flora and biological rhythms.</div>
+        `;
+        board.appendChild(row);
+      });
+      panel.querySelector('#validateRoom2').onclick = () => validateRoom2(panel);
+    }
+
+    function validateRoom2(panel){
+      const selects = [...panel.querySelectorAll('select')];
+      if(selects.some(s => !s.value)) return renderStatus(panel, false, 'Complete the three matches before validating.');
+      const correct = selects.every((s, i) => s.value === room2Data[i].correct);
+      if(correct){
+        unlockRoom(2);
+        renderStatus(panel, true, 'Correct. The pollution pathways are consistent. The room clue is <strong>A</strong>.');
+      } else {
+        renderStatus(panel, false, 'Some matches are off. Review which impact is specific to noise, light and chemical pollution.');
+      }
+    }
+
+    function renderRoom3(target){
+      const panel = document.createElement('div');
+      panel.className = 'panel';
+      panel.innerHTML = `
+        <h3>Classify the species and estimate the ecological effect</h3>
+        <p>At least four correct identifications are enough to move forward. Aim for the full set.</p>
+        <div class="species-board" id="room3Board"></div>
+        <div class="room-actions"><button class="btn btn-primary" id="validateRoom3">Validate species analysis</button></div>
+      `;
+      target.appendChild(panel);
+      const board = panel.querySelector('#room3Board');
+      room3Data.forEach((item, index) => {
+        const row = document.createElement('div');
+        row.className = 'species-row';
+        row.innerHTML = `
+          <div>
+            <div class="label">Species ${index + 1}</div>
+            <div class="species-name">${item.species}</div>
+            <div class="small">${item.note}</div>
+          </div>
+          <div>
+            <div class="small">Classification</div>
+            <select data-kind="type" data-index="${index}">
+              <option value="">Choose…</option>
+              ${room3TypeOptions.map(o => `<option value="${o}">${o}</option>`).join('')}
+            </select>
+          </div>
+          <div>
+            <div class="small">Estimated impact</div>
+            <select data-kind="impact" data-index="${index}">
+              <option value="">Choose…</option>
+              ${room3ImpactOptions.map(o => `<option value="${o}">${o}</option>`).join('')}
+            </select>
+          </div>
+        `;
+        board.appendChild(row);
+      });
+      panel.querySelector('#validateRoom3').onclick = () => validateRoom3(panel);
+    }
+
+    function validateRoom3(panel){
+      const typeSelects = [...panel.querySelectorAll('select[data-kind="type"]')];
+      const impactSelects = [...panel.querySelectorAll('select[data-kind="impact"]')];
+      if([...typeSelects, ...impactSelects].some(s => !s.value)) return renderStatus(panel, false, 'Complete all species fields before validating.');
+      let correctCount = 0;
+      room3Data.forEach((item, i) => {
+        if(typeSelects[i].value === item.type && impactSelects[i].value === item.impact) correctCount++;
+      });
+      if(correctCount >= 4){
+        unlockRoom(3);
+        renderStatus(panel, true, `Good work. You achieved <strong>${correctCount}/6</strong> correct species identifications. The room clue is <strong>B</strong>.`);
+      } else {
+        renderStatus(panel, false, `You currently have <strong>${correctCount}/6</strong> correct identifications. You need at least 4 to progress.`);
+      }
+    }
+
+    function renderRoom4(target){
+      const panel = document.createElement('div');
+      panel.className = 'panel';
+      panel.innerHTML = `
+        <h3>Select the ecological links that create a functional ecosystem</h3>
+        <p>Choose the realistic relations only. You need at least five correct links and no false ecological claims.</p>
+        <div class="checkbox-list" id="room4List"></div>
+        <div class="room-actions"><button class="btn btn-primary" id="validateRoom4">Validate ecological web</button></div>
+      `;
+      target.appendChild(panel);
+      const list = panel.querySelector('#room4List');
+      room4Data.forEach((item, index) => {
+        const row = document.createElement('label');
+        row.className = 'checkbox';
+        row.innerHTML = `<input type="checkbox" data-index="${index}"><div><div class="species-name">${item.text}</div><div class="small">Mark only if the relationship is realistic and ecologically coherent.</div></div>`;
+        list.appendChild(row);
+      });
+      panel.querySelector('#validateRoom4').onclick = () => validateRoom4(panel);
+    }
+
+    function validateRoom4(panel){
+      const checked = [...panel.querySelectorAll('input[type="checkbox"]')].map(c => c.checked);
+      const falseSelected = room4Data.some((item, i) => checked[i] && !item.correct);
+      const trueSelected = room4Data.filter((item, i) => checked[i] && item.correct).length;
+      if(!falseSelected && trueSelected >= 5){
+        unlockRoom(4);
+        renderStatus(panel, true, `The ecosystem works. You selected <strong>${trueSelected}</strong> valid relationships without false links. The room clue is <strong>I</strong>.`);
+      } else {
+        renderStatus(panel, false, `Not yet. You currently have <strong>${trueSelected}</strong> valid selected links${falseSelected ? ' and at least one unrealistic relation' : ''}.`);
+      }
+    }
+
+    function renderRoom5(target){
+      const panel = document.createElement('div');
+      panel.className = 'panel';
+      panel.innerHTML = `
+        <h3>Choose the actions that are truly beneficial for biodiversity</h3>
+        <p>Select exactly six actions that would fit a serious biodiversity action plan. Avoid symbolic or misleading gestures.</p>
+        <div class="checkbox-list" id="room5List"></div>
+        <div class="room-actions"><button class="btn btn-primary" id="validateRoom5">Validate action plan</button></div>
+      `;
+      target.appendChild(panel);
+      const list = panel.querySelector('#room5List');
+      room5Data.forEach((item, index) => {
+        const row = document.createElement('label');
+        row.className = 'checkbox';
+        row.innerHTML = `<input type="checkbox" data-index="${index}"><div><div class="action-name">${item.text}</div><div class="small">Select this only if it creates real ecological value or meaningful learning.</div></div>`;
+        list.appendChild(row);
+      });
+      panel.querySelector('#validateRoom5').onclick = () => validateRoom5(panel);
+    }
+
+    function validateRoom5(panel){
+      const checked = [...panel.querySelectorAll('input[type="checkbox"]')].map(c => c.checked);
+      const selectedCount = checked.filter(Boolean).length;
+      if(selectedCount !== 6) return renderStatus(panel, false, `Select exactly 6 actions. You currently selected ${selectedCount}.`);
+      const correct = room5Data.every((item, i) => checked[i] === item.correct);
+      if(correct){
+        unlockRoom(5);
+        renderStatus(panel, true, 'Excellent. You separated real biodiversity action from greenwashing. The room clue is <strong>T</strong>.');
+      } else {
+        renderStatus(panel, false, 'Some selected actions are too cosmetic or misleading. Review what creates measurable ecological benefit.');
+      }
+    }
+
+    function renderResults(){
+      setScreen('results');
+      const code = state.clues.join('');
+      document.getElementById('scoreValue').textContent = `${state.clues.length}/5`;
+      document.getElementById('scoreLevel').textContent = state.clues.length === 5 ? 'Biodiversity restoration team' : 'Mission still in progress';
+      document.getElementById('scoreText').textContent = state.clues.length === 5
+        ? 'You solved the five biodiversity rooms and completed a coherent route from diagnosis to ecological action in an industrial setting.'
+        : 'You unlocked part of the mission. Review the unresolved rooms and complete the restoration pathway.';
+      document.getElementById('finalCode').textContent = code || '—';
+      const grid = document.getElementById('summaryGrid');
+      grid.innerHTML = rooms.map(room => `
+        <div class="summary-card">
+          <div class="small">${room.title}</div>
+          <div style="font-size:28px;font-family:Manrope,Inter,sans-serif;margin-top:8px">${state.solved[room.id] ? 'Solved' : 'Pending'}</div>
+          <div class="footnote" style="margin-top:6px">Clue: ${state.solved[room.id] ? room.key : 'Locked'}</div>
+        </div>
+      `).join('');
+    }
+
+    function resetMission(){
+      state.currentRoom = 1;
+      state.solved = {};
+      state.clues = [];
+      state.roomStatus = {};
+      renderMission();
+    }
+
+    document.getElementById('btnStart').onclick = resetMission;
+    document.getElementById('btnIntro').onclick = resetMission;
+    document.getElementById('btnRestart').onclick = resetMission;
+    document.getElementById('btnBackMission').onclick = renderMission;
+
+    updateSidebar();
+  </script>
+</body>
+</html>
