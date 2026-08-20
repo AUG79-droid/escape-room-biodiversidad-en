@@ -171,7 +171,7 @@
       <div class="brand">
         <div class="brand-mark">✦</div>
         <div class="brand-copy">
-          <span>Airbus biodiversity mission</span>
+          <span>Airbus sustainability mission</span>
           <strong>Sustainable Aviation Mission</strong>
         </div>
       </div>
@@ -184,9 +184,9 @@
     <section class="screen active" id="screen-home">
       <div class="hero card">
         <div class="hero-copy">
-          <div class="eyebrow">Interactive biodiversity challenge</div>
+          <div class="eyebrow">Interactive sustainability challenge</div>
           <h1>Sustainable Aviation.<br>Restore balance.</h1>
-          <p>A premium escape-room experience for Airbus teams. Solve five interconnected biodiversity challenges, unlock the secret clues and reactivate the Green Corridor around the Getafe site.</p>
+          <p>A premium escape-room experience for Airbus teams. Solve five interconnected sustainability and nature challenges, unlock the secret clues and reactivate the Green Corridor around the Getafe site.</p>
           <div class="actions">
             <button class="btn btn-primary" id="btnStart">Start mission</button>
             <button class="btn btn-secondary" id="btnIntro">View mission brief</button>
@@ -204,9 +204,9 @@
               <div class="hud"><span>Mission mode</span><span>5 clues</span><span>Green Corridor</span></div>
               <div class="mission-core"><div class="orb">🌿</div></div>
               <div class="mission-copy">
-                <span class="mini">Industrial biodiversity</span>
+                <span class="mini">Sustainability in industrial settings</span>
                 <h3>Learn through action, solve as a team</h3>
-                <p>From habitat loss and invisible pollution to ecological balance and anti-greenwashing decisions, each room converts biodiversity learning into a collaborative challenge.</p>
+                <p>From habitat loss and invisible pollution to ecological balance and anti-greenwashing decisions, each room converts nature-related sustainability learning into a collaborative challenge.</p>
               </div>
             </div>
             <div class="stack">
@@ -218,7 +218,7 @@
               <div class="side-card">
                 <div class="side-icon">🔐</div>
                 <h4>Unlock the code</h4>
-                <p>Each completed room reveals one clue. Collect them all to generate your final biodiversity restoration keyword.</p>
+                <p>Each completed room reveals one clue. Collect them all to generate your final ecosystem-restoration keyword.</p>
               </div>
             </div>
           </div>
@@ -260,8 +260,8 @@
           <div class="eyebrow">Mission completed</div>
           <h2 style="font-size:52px;line-height:.94;margin-top:10px">Green Corridor restored</h2>
           <div class="score-big" id="scoreValue">5/5</div>
-          <div class="level" id="scoreLevel">Biodiversity restoration team</div>
-          <p id="scoreText" style="max-width:660px;line-height:1.9;color:rgba(243,248,255,.82)">You solved the five biodiversity rooms and rebuilt a coherent restoration pathway for the site.</p>
+          <div class="level" id="scoreLevel">Ecosystem restoration team</div>
+          <p id="scoreText" style="max-width:660px;line-height:1.9;color:rgba(243,248,255,.82)">You solved the five nature-related rooms and rebuilt a coherent restoration pathway for the site.</p>
           <div class="actions">
             <button class="btn btn-primary" id="btnRestart">Play again</button>
             <button class="btn btn-secondary" id="btnBackMission">Review mission</button>
@@ -308,7 +308,7 @@
       {
         id: 3,
         key: 'B',
-        title: 'Room 3 · Biodiversity detectives',
+        title: 'Room 3 · Nature detectives',
         eyebrow: 'Classify the species',
         tags: ['Native', 'Exotic', 'Invasive'],
         description: 'Classify species and identify whether their estimated ecological effect is positive, neutral or negative. Four correct identifications are enough to progress.',
@@ -682,9 +682,9 @@
       setScreen('results');
       const code = state.clues.join('');
       document.getElementById('scoreValue').textContent = `${state.clues.length}/5`;
-      document.getElementById('scoreLevel').textContent = state.clues.length === 5 ? 'Biodiversity restoration team' : 'Mission still in progress';
+      document.getElementById('scoreLevel').textContent = state.clues.length === 5 ? 'Ecosystem restoration team' : 'Mission still in progress';
       document.getElementById('scoreText').textContent = state.clues.length === 5
-        ? 'You solved the five biodiversity rooms and completed a coherent route from diagnosis to ecological action in an industrial setting.'
+        ? 'You solved the five nature-related rooms and completed a coherent route from diagnosis to ecological action in an industrial setting.'
         : 'You unlocked part of the mission. Review the unresolved rooms and complete the restoration pathway.';
       document.getElementById('finalCode').textContent = code || '—';
       const grid = document.getElementById('summaryGrid');
