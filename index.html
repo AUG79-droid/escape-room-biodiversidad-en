@@ -1,716 +1,82 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sustainable Aviation Mission | Airbus Escape Room</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="A five-room sustainability systems escape-room simulation for aerospace teams.">
+  <meta name="theme-color" content="#071820">
+  <title>Sustainability Systems Escape Room</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@700;800&display=swap');
-    :root{
-      --bg:#071629;
-      --panel:#0d223f;
-      --panel2:#122b4f;
-      --soft:#eef6ff;
-      --muted:#a7bdd8;
-      --line:rgba(255,255,255,.09);
-      --cyan:#6ce3ff;
-      --green:#79f2b2;
-      --green2:#59c08f;
-      --gold:#ffd78c;
-      --danger:#ff8d9b;
-      --ok:#84f3b7;
-      --shadow:0 28px 70px rgba(0,0,0,.34);
-    }
-    *{box-sizing:border-box}
-    html,body{margin:0;padding:0;font-family:Inter,Arial,sans-serif;background:
-      radial-gradient(circle at top left, rgba(108,227,255,.14), transparent 20%),
-      radial-gradient(circle at 90% 10%, rgba(121,242,178,.12), transparent 18%),
-      linear-gradient(180deg,#061225 0%, #071629 45%, #081a31 100%);
-      color:#f3f8ff;min-height:100%;}
-    body::before{content:"";position:fixed;inset:0;pointer-events:none;background:
-      linear-gradient(rgba(255,255,255,.018) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,.018) 1px, transparent 1px);
-      background-size:34px 34px;opacity:.28}
-    .shell{max-width:1380px;margin:0 auto;padding:14px 18px 40px;position:relative;z-index:1}
-    .topbar{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:18px 24px;border-radius:24px;background:rgba(7,20,42,.78);border:1px solid var(--line);backdrop-filter:blur(14px);box-shadow:0 18px 40px rgba(0,0,0,.24);position:sticky;top:14px;z-index:10}
-    .brand{display:flex;gap:16px;align-items:center}
-    .brand-mark{width:44px;height:44px;border-radius:16px;background:linear-gradient(135deg,var(--cyan),var(--green));display:grid;place-items:center;color:#05233a;font-weight:900}
-    .brand-copy strong{display:block;font-family:Manrope,Inter,sans-serif;font-size:20px;letter-spacing:-.03em}
-    .brand-copy span{display:block;color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.18em;font-weight:800}
-    .topnav{display:flex;gap:10px;flex-wrap:wrap}
-    .chip,.ghost-chip{padding:10px 14px;border-radius:999px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.14em;border:1px solid var(--line)}
-    .chip{background:rgba(255,255,255,.08);color:#fff}
-    .ghost-chip{background:rgba(255,255,255,.04);color:var(--muted)}
-    .screen{display:none;margin-top:20px}
-    .screen.active{display:block}
-    .card{background:linear-gradient(180deg, rgba(14,34,63,.9), rgba(9,22,44,.94));border:1px solid var(--line);border-radius:32px;box-shadow:var(--shadow);overflow:hidden}
-    .hero{display:grid;grid-template-columns:1.03fr .97fr;min-height:720px}
-    .hero-copy{padding:64px 54px 56px}
-    .eyebrow{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.22em;color:#97cbff}
-    h1,h2,h3,h4{font-family:Manrope,Inter,sans-serif;letter-spacing:-.04em;margin:0}
-    .hero h1{font-size:86px;line-height:.9;margin:16px 0 18px;max-width:620px}
-    .hero p{font-size:19px;line-height:1.8;color:rgba(243,248,255,.83);max-width:600px}
-    .actions{display:flex;gap:14px;flex-wrap:wrap;margin-top:28px}
-    button{font:inherit}
-    .btn{border:0;border-radius:18px;padding:15px 22px;font-weight:800;cursor:pointer;transition:.18s ease;box-shadow:0 18px 34px rgba(0,0,0,.16)}
-    .btn:hover{transform:translateY(-2px)}
-    .btn-primary{background:linear-gradient(135deg,var(--green),#c6ffd8);color:#073548}
-    .btn-secondary{background:linear-gradient(135deg,rgba(255,255,255,.16),rgba(255,255,255,.08));color:#fff;border:1px solid rgba(255,255,255,.12)}
-    .btn-ghost{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);color:var(--muted)}
-    .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:34px}
-    .stat{padding:18px;border-radius:22px;background:linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,255,255,.05));border:1px solid rgba(255,255,255,.08)}
-    .stat strong{display:block;font-size:32px;line-height:.95}
-    .stat span{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.18em;color:var(--muted);margin-top:8px;font-weight:700}
-    .hero-visual{padding:38px;display:flex;align-items:center;justify-content:center}
-    .dashboard{width:100%;max-width:590px;display:grid;grid-template-columns:1.05fr .95fr;gap:18px}
-    .main-panel,.side-card{border-radius:28px;border:1px solid rgba(255,255,255,.08);overflow:hidden;position:relative}
-    .main-panel{min-height:560px;background:
-      radial-gradient(circle at 60% 18%, rgba(255,215,140,.28), transparent 14%),
-      radial-gradient(circle at 20% 82%, rgba(121,242,178,.20), transparent 20%),
-      linear-gradient(180deg, rgba(3,11,25,.06), rgba(3,11,25,.28)),
-      repeating-linear-gradient(90deg, rgba(21,68,40,.42) 0 12px, rgba(39,98,55,.18) 12px 26px),
-      linear-gradient(180deg,#244d39 0%,#132219 100%);
-      box-shadow:0 22px 48px rgba(0,0,0,.28),0 0 28px rgba(108,227,255,.16)}
-    .main-panel::before{content:"";position:absolute;inset:26px;border-radius:30px;border:1px solid rgba(255,255,255,.14)}
-    .mission-core{position:absolute;left:50%;top:45%;transform:translate(-50%,-50%);width:250px;height:250px;border-radius:50%;display:grid;place-items:center}
-    .mission-core::before{content:"";position:absolute;inset:16px;border-radius:50%;border:1px solid rgba(255,255,255,.18);box-shadow:0 0 24px rgba(108,227,255,.22)}
-    .orb{width:118px;height:118px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 40% 35%, rgba(255,255,255,.8), rgba(108,227,255,.46) 34%, rgba(15,67,102,.6) 72%, rgba(255,255,255,.06));box-shadow:0 0 36px rgba(108,227,255,.34);font-size:34px}
-    .hud{position:absolute;left:22px;top:22px;display:flex;gap:8px;flex-wrap:wrap}
-    .hud span{padding:8px 10px;border-radius:999px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.12);font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.14em}
-    .mission-copy{position:absolute;left:24px;right:24px;bottom:24px}
-    .mini{display:inline-flex;padding:7px 10px;border-radius:999px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.12);font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.14em;margin-bottom:12px}
-    .mission-copy h3{font-size:36px;line-height:.95;margin-bottom:10px}
-    .mission-copy p{margin:0;color:rgba(255,255,255,.82);font-size:14px;line-height:1.7}
-    .stack{display:grid;gap:18px}
-    .side-card{min-height:271px;padding:24px;background:linear-gradient(180deg,rgba(255,255,255,.14),rgba(255,255,255,.06));display:flex;flex-direction:column;justify-content:flex-end}
-    .side-icon{width:54px;height:54px;border-radius:18px;background:rgba(255,255,255,.16);display:grid;place-items:center;margin-bottom:16px;font-size:22px}
-    .side-card h4{font-size:28px;margin-bottom:8px}
-    .side-card p{margin:0;color:rgba(243,248,255,.76);line-height:1.7}
-    .mission-layout{display:grid;grid-template-columns:320px 1fr;gap:18px;align-items:start}
-    .sidebar{padding:22px;border-radius:28px;background:linear-gradient(180deg,rgba(11,27,49,.92),rgba(7,18,35,.96));border:1px solid var(--line);box-shadow:var(--shadow);position:sticky;top:100px}
-    .sidebar h3{font-size:26px;margin-bottom:14px}
-    .sidebar p{margin:0 0 20px;color:var(--muted);line-height:1.75}
-    .room-list{display:grid;gap:12px}
-    .room-item{padding:14px 16px;border-radius:20px;border:1px solid var(--line);background:rgba(255,255,255,.05);cursor:pointer;transition:.16s}
-    .room-item:hover{transform:translateY(-2px)}
-    .room-item.active{background:linear-gradient(135deg,rgba(121,242,178,.18),rgba(108,227,255,.12));border-color:rgba(121,242,178,.28)}
-    .room-item strong{display:block;font-size:15px;letter-spacing:-.02em}
-    .room-item span{display:block;margin-top:7px;font-size:12px;color:var(--muted);line-height:1.5}
-    .clue-panel{margin-top:18px;padding:16px;border-radius:22px;background:rgba(255,255,255,.04);border:1px solid var(--line)}
-    .clues{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-    .clue{padding:8px 11px;border-radius:14px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.12);font-size:12px;font-weight:800;letter-spacing:.08em}
-    .workspace{padding:22px;border-radius:28px;background:linear-gradient(180deg,rgba(10,25,48,.92),rgba(7,18,35,.96));border:1px solid var(--line);box-shadow:var(--shadow)}
-    .workspace-head{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;margin-bottom:18px}
-    .workspace-head h2{font-size:42px;line-height:.94;margin-top:8px}
-    .workspace-head p{max-width:760px;color:var(--muted);line-height:1.8}
-    .room-tags{display:flex;gap:10px;flex-wrap:wrap}
-    .room-tags .chip{background:rgba(255,255,255,.06)}
-    .progress{height:12px;border-radius:999px;background:rgba(255,255,255,.07);overflow:hidden;margin:10px 0 20px}
-    .progress > div{height:100%;background:linear-gradient(90deg,var(--green),var(--cyan))}
-    .panel{padding:22px;border-radius:26px;background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.04));border:1px solid rgba(255,255,255,.08)}
-    .panel h3{font-size:28px;margin-bottom:8px}
-    .panel p,.panel li{color:rgba(243,248,255,.82);line-height:1.7}
-    .panel ul{margin:12px 0 0 18px;padding:0}
-    .grid-2,.grid-3,.grid-4{display:grid;gap:16px}
-    .grid-2{grid-template-columns:repeat(2,1fr)}
-    .grid-3{grid-template-columns:repeat(3,1fr)}
-    .grid-4{grid-template-columns:repeat(4,1fr)}
-    .select-card{padding:18px;border-radius:22px;border:1px solid rgba(255,255,255,.08);background:linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,255,255,.04));cursor:pointer;transition:.16s;position:relative;min-height:135px}
-    .select-card:hover{transform:translateY(-3px);border-color:rgba(108,227,255,.32)}
-    .select-card.selected{outline:2px solid rgba(121,242,178,.52);background:linear-gradient(180deg,rgba(121,242,178,.16),rgba(108,227,255,.08))}
-    .select-card.correct{outline:2px solid rgba(132,243,183,.65)}
-    .select-card.incorrect{outline:2px solid rgba(255,141,155,.62)}
-    .label{display:inline-flex;padding:7px 10px;border-radius:999px;background:rgba(255,255,255,.12);font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.16em;margin-bottom:12px;color:#fff}
-    .small{font-size:13px;color:var(--muted);line-height:1.6}
-    .room-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px}
-    .status{padding:16px 18px;border-radius:18px;margin-top:16px;font-weight:700;line-height:1.7;border:1px solid transparent}
-    .status.ok{background:rgba(88,192,143,.16);border-color:rgba(88,192,143,.24);color:#dafde8}
-    .status.ko{background:rgba(255,141,155,.12);border-color:rgba(255,141,155,.20);color:#ffe4e7}
-    .pair-board{display:grid;gap:14px}
-    .pair-row{display:grid;grid-template-columns:1.1fr 1fr auto;gap:12px;align-items:center;padding:14px;border-radius:18px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.06)}
-    select{width:100%;padding:12px 14px;border-radius:14px;background:#08182f;color:#fff;border:1px solid rgba(255,255,255,.14);font:inherit}
-    .species-board,.action-board{display:grid;gap:14px}
-    .species-row,.action-row{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:12px;align-items:start;padding:14px;border-radius:18px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.06)}
-    .species-name,.action-name{font-weight:700}
-    .matrix{display:grid;gap:14px;margin-top:12px}
-    .matrix-item{padding:18px;border-radius:22px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.07)}
-    .matrix-item h4{font-size:20px;margin-bottom:8px}
-    .checkbox-list{display:grid;gap:10px;margin-top:12px}
-    .checkbox{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border-radius:16px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06)}
-    .checkbox input{margin-top:4px;transform:scale(1.15)}
-    .results{display:grid;grid-template-columns:1.03fr .97fr;gap:18px}
-    .score-card{padding:26px;border-radius:30px;background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.04));border:1px solid rgba(255,255,255,.08)}
-    .score-big{font-size:118px;line-height:.85;font-family:Manrope,Inter,sans-serif;letter-spacing:-.08em;margin:10px 0}
-    .level{font-size:28px;color:var(--green);font-weight:800}
-    .footnote{color:var(--muted);font-size:13px;line-height:1.7;margin-top:14px}
-    .summary-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
-    .summary-card{padding:18px;border-radius:22px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.06)}
-    @media (max-width:1100px){
-      .hero,.mission-layout,.results{grid-template-columns:1fr}
-      .hero h1{font-size:58px}
-      .workspace-head h2{font-size:34px}
-      .stats{grid-template-columns:repeat(2,1fr)}
-      .grid-2,.grid-3,.grid-4,.summary-grid{grid-template-columns:1fr}
-      .species-row,.action-row,.pair-row{grid-template-columns:1fr}
-      .sidebar{position:static}
-    }
-    @media (max-width:720px){
-      .shell{padding:10px 10px 30px}
-      .topbar{padding:14px 16px;border-radius:20px}
-      .hero-copy{padding:38px 24px 30px}
-      .hero h1{font-size:46px}
-      .hero p{font-size:17px}
-      .hero-visual{padding:20px}
-      .workspace{padding:16px}
-    }
+    :root{--ink:#071820;--ink2:#0b2631;--panel:#10333f;--white:#f6fbfb;--muted:#aec2c7;--mint:#79efc0;--cyan:#65d9ff;--amber:#ffc568;--red:#ff857d;--line:rgba(255,255,255,.14);--shadow:0 24px 70px rgba(0,8,12,.3)}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;min-height:100vh;background:radial-gradient(circle at 10% 10%,rgba(101,217,255,.08),transparent 25%),var(--ink);color:var(--white);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}button,input,select{font:inherit}button{touch-action:manipulation}button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid var(--amber);outline-offset:3px}.skip{position:fixed;left:12px;top:-60px;z-index:100;background:var(--amber);color:var(--ink);padding:10px 14px;border-radius:9px;font-weight:850}.skip:focus{top:12px}
+    .app{max-width:1480px;margin:auto;padding:16px clamp(12px,3vw,38px) 50px}.topbar{position:sticky;top:10px;z-index:40;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:13px 16px;border:1px solid var(--line);border-radius:18px;background:rgba(7,24,32,.88);backdrop-filter:blur(16px);box-shadow:0 12px 36px rgba(0,0,0,.22)}.brand{display:flex;align-items:center;gap:11px;min-width:0}.mark{width:42px;height:42px;display:grid;place-items:center;border-radius:13px;background:linear-gradient(135deg,var(--mint),var(--cyan));color:var(--ink);font-weight:950}.brand strong{display:block;font-size:clamp(15px,2vw,20px);line-height:1.05}.brand small{display:block;color:var(--muted);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.nav{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}.chip{padding:8px 11px;border:1px solid var(--line);border-radius:999px;color:var(--muted);font-size:12px}.chip b{color:var(--white)}
+    .screen{display:none}.screen.active{display:block;animation:enter .32s ease}@keyframes enter{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}.card{border:1px solid var(--line);border-radius:28px;background:var(--ink2);box-shadow:var(--shadow)}.eyebrow{display:flex;align-items:center;gap:9px;color:var(--mint);font-size:12px;font-weight:850;text-transform:uppercase;letter-spacing:.14em}.eyebrow::before{content:"";width:28px;height:2px;background:currentColor}.btn{border:0;border-radius:13px;padding:13px 17px;font-weight:850;cursor:pointer}.btn-primary{background:var(--mint);color:var(--ink)}.btn-secondary{background:var(--cyan);color:var(--ink)}.btn-ghost{background:rgba(255,255,255,.06);color:var(--white);border:1px solid var(--line)}.btn:disabled{opacity:.42;cursor:not-allowed}
+    .hero{min-height:760px;margin-top:20px;position:relative;overflow:hidden;display:flex;align-items:flex-end;background:linear-gradient(180deg,rgba(3,15,21,.08) 5%,rgba(3,15,21,.88) 75%,#071820 100%),url('assets/operations-room.webp') center/cover no-repeat}.hero-copy{padding:clamp(26px,6vw,72px);position:relative;max-width:1060px}.hero h1,.brief h1,.results h1{font-size:clamp(52px,8vw,112px);line-height:.88;letter-spacing:-.07em;margin:16px 0 22px}.hero p{max-width:750px;font-size:clamp(17px,2vw,21px);line-height:1.65;color:#e0ecee}.facts{display:flex;flex-wrap:wrap;gap:9px;margin:23px 0}.fact{padding:9px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.22);background:rgba(7,24,32,.72);font-size:13px}.actions{display:flex;gap:10px;flex-wrap:wrap}.resume-card{display:none;margin-top:15px;padding:15px;border:1px solid rgba(255,197,104,.5);border-radius:15px;background:rgba(255,197,104,.09);max-width:580px}.resume-card.show{display:block}.resume-card strong{display:block}.resume-card p{margin:4px 0 12px;color:#dce7e9;font-size:13px}
+    .brief{margin-top:20px;padding:clamp(25px,5vw,60px)}.brief h1{font-size:clamp(46px,6vw,82px);max-width:1000px}.brief-lead{max-width:900px;color:#d9e7e9;font-size:18px;line-height:1.7}.brief-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:24px}.brief-panel{padding:22px;border:1px solid var(--line);border-radius:19px;background:rgba(255,255,255,.04)}.brief-panel h2{font-size:22px;margin:0 0 12px}.brief-panel p,.brief-panel li{color:var(--muted);line-height:1.6}.brief-panel ol,.brief-panel ul{padding-left:22px}.route-preview{display:grid;gap:8px}.route-row{display:grid;grid-template-columns:38px 1fr;gap:11px;align-items:center;padding:11px;border-radius:13px;background:rgba(255,255,255,.04)}.route-row b{width:38px;height:38px;display:grid;place-items:center;border-radius:11px;background:rgba(121,239,192,.13);color:var(--mint)}.route-row strong{display:block}.route-row span{display:block;color:var(--muted);font-size:12px;margin-top:2px}.notice{margin:18px 0;padding:13px 15px;border-left:3px solid var(--amber);background:rgba(255,197,104,.07);color:#e8e0d0;font-size:12px;line-height:1.55}
+    .mission{margin-top:20px}.mission-grid{display:grid;grid-template-columns:330px minmax(0,1fr);gap:18px}.sidebar{padding:20px;align-self:start;position:sticky;top:92px}.sidebar h2{font-size:23px;margin:12px 0 8px}.sidebar>p{color:var(--muted);font-size:13px;line-height:1.55}.route{display:grid;gap:8px;margin:18px 0}.room-link{display:grid;grid-template-columns:38px 1fr auto;gap:10px;align-items:center;width:100%;padding:11px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.035);color:var(--white);text-align:left}.room-link:not(:disabled){cursor:pointer}.room-link.active{border-color:var(--cyan);background:rgba(101,217,255,.08)}.room-link.solved{border-color:rgba(121,239,192,.38)}.room-link .num{width:38px;height:38px;display:grid;place-items:center;border-radius:11px;background:rgba(255,255,255,.08);font-weight:900}.room-link.solved .num{background:var(--mint);color:var(--ink)}.room-link strong{display:block;font-size:13px}.room-link small{display:block;color:var(--muted);margin-top:2px}.lock{color:var(--muted);font-size:12px}.progress{height:8px;border-radius:999px;background:rgba(255,255,255,.09);overflow:hidden}.progress>div{height:100%;width:0;background:linear-gradient(90deg,var(--mint),var(--cyan));transition:width .3s}.mission-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.mission-stat{padding:11px;border-radius:12px;background:rgba(255,255,255,.04)}.mission-stat strong{display:block;font-size:19px}.mission-stat span{display:block;color:var(--muted);font-size:10px;text-transform:uppercase}.side-actions{display:grid;gap:8px;margin-top:13px}.side-actions .btn{width:100%}
+    .workspace{padding:clamp(22px,4vw,44px)}.room-head{display:flex;justify-content:space-between;gap:18px;align-items:flex-start}.room-head h1{font-size:clamp(37px,5vw,68px);line-height:.94;letter-spacing:-.055em;margin:13px 0}.room-head p{max-width:850px;color:#d6e5e7;line-height:1.65}.tags{display:flex;gap:7px;flex-wrap:wrap;margin:16px 0}.tag{padding:7px 9px;border:1px solid var(--line);border-radius:999px;color:var(--muted);font-size:11px}.tag:first-child{color:var(--mint);border-color:rgba(121,239,192,.35)}.clue-orb{flex:0 0 72px;height:72px;border-radius:20px;display:grid;place-items:center;border:1px solid var(--line);background:rgba(255,255,255,.05);font-size:28px}.puzzle{margin-top:20px;padding:20px;border:1px solid var(--line);border-radius:19px;background:rgba(255,255,255,.035)}.puzzle h2{font-size:23px;margin:0 0 7px}.puzzle>p{color:var(--muted);line-height:1.55}.rows{display:grid;gap:10px;margin:17px 0}.puzzle-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(230px,.72fr);gap:14px;align-items:center;padding:15px;border:1px solid var(--line);border-radius:15px;background:rgba(255,255,255,.035)}.puzzle-row strong{display:block;font-size:14px;line-height:1.45}.puzzle-row span{display:block;color:var(--muted);font-size:12px;line-height:1.45;margin-top:4px}.puzzle-row select{width:100%;padding:12px;border:1px solid var(--line);border-radius:11px;background:#0a222c;color:var(--white)}.puzzle-actions{display:flex;gap:9px;flex-wrap:wrap;align-items:center}.status{display:none;margin-top:13px;padding:14px;border-radius:13px;line-height:1.55}.status.show{display:block}.status.ok{border:1px solid rgba(121,239,192,.5);background:rgba(121,239,192,.08)}.status.ko{border:1px solid rgba(255,133,125,.5);background:rgba(255,133,125,.08)}.hint{display:none;margin-top:12px;padding:13px;border-left:3px solid var(--amber);background:rgba(255,197,104,.07);color:#e9dfcc;line-height:1.55}.hint.show{display:block}
+    .debrief{display:none;margin-top:16px;padding:22px;border:1px solid rgba(121,239,192,.42);border-radius:18px;background:linear-gradient(135deg,rgba(121,239,192,.09),rgba(101,217,255,.045))}.debrief.show{display:block;animation:enter .3s ease}.debrief-head{display:flex;gap:13px;align-items:flex-start}.clue{flex:0 0 48px;height:48px;display:grid;place-items:center;border-radius:14px;background:var(--mint);color:var(--ink);font-size:24px;font-weight:950}.debrief h2{margin:0 0 5px}.debrief p{color:#d9e7e9;line-height:1.65}.learning-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}.learning-box{padding:14px;border-radius:13px;background:rgba(255,255,255,.045)}.learning-box strong{display:block;color:var(--mint);font-size:11px;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}.learning-box span,.learning-box li{color:#d6e4e6;font-size:13px;line-height:1.5}.learning-box ul{margin:0;padding-left:18px}.source{font-size:11px;color:var(--muted)}.source a{color:var(--cyan)}
+    .code-panel{display:none;margin-top:16px;padding:22px;border:1px solid rgba(255,197,104,.48);border-radius:18px;background:rgba(255,197,104,.07)}.code-panel.show{display:block}.code-panel h2{font-size:28px;margin:0 0 7px}.code-panel p{color:#e6dcc8;line-height:1.55}.code-entry{display:flex;gap:9px;flex-wrap:wrap}.code-entry input{min-width:220px;flex:1;padding:13px 15px;border:1px solid var(--line);border-radius:12px;background:#081f28;color:var(--white);font-weight:900;text-transform:uppercase;letter-spacing:.18em}
+    .results{margin-top:20px;padding:clamp(28px,5vw,62px)}.results h1{font-size:clamp(50px,7vw,92px);max-width:1050px}.results-lead{max-width:850px;color:#d8e6e8;font-size:18px;line-height:1.65}.result-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:23px 0}.result-card{padding:18px;border-radius:16px;background:rgba(255,255,255,.045)}.result-card strong{display:block;font-size:30px}.result-card span{display:block;color:var(--muted);font-size:11px;text-transform:uppercase}.code-final{display:inline-block;margin:7px 0 20px;padding:13px 18px;border-radius:14px;background:var(--mint);color:var(--ink);font-size:30px;font-weight:950;letter-spacing:.14em}.learning-map{display:grid;grid-template-columns:repeat(5,1fr);gap:9px;margin:18px 0}.learning-card{padding:14px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.035)}.learning-card b{color:var(--mint)}.learning-card strong{display:block;margin:5px 0}.learning-card span{color:var(--muted);font-size:12px;line-height:1.45}.references{margin-top:20px;padding:17px;border:1px solid var(--line);border-radius:15px;color:var(--muted);font-size:12px;line-height:1.55}.references a{color:var(--cyan)}
+    @media(max-width:1080px){.mission-grid{grid-template-columns:1fr}.sidebar{position:static}.route{grid-template-columns:1fr 1fr}.brief-grid{grid-template-columns:1fr}.learning-map{grid-template-columns:1fr 1fr}.hero{min-height:690px}}
+    @media(max-width:700px){.app{padding:9px 9px 36px}.topbar{top:5px}.nav .chip:first-child{display:none}.hero{min-height:650px}.hero-copy{padding:23px}.hero h1{font-size:53px}.route,.puzzle-row,.learning-grid,.result-grid,.learning-map{grid-template-columns:1fr}.room-head{display:block}.clue-orb{margin-bottom:12px}.code-entry{display:grid}.code-entry input{min-width:0}.brief,.workspace,.sidebar,.results{padding:20px}}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
   </style>
 </head>
 <body>
-  <div class="shell">
-    <header class="topbar">
-      <div class="brand">
-        <div class="brand-mark">✦</div>
-        <div class="brand-copy">
-          <span>Airbus sustainability mission</span>
-          <strong>Sustainable Aviation Mission</strong>
-        </div>
-      </div>
-      <nav class="topnav">
-        <div class="chip" id="navStage">Home</div>
-        <div class="ghost-chip" id="navContext">Green Corridor</div>
-      </nav>
-    </header>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="app">
+  <header class="topbar"><div class="brand"><div class="mark">SE</div><div><strong>Sustainability Systems Escape Room</strong><small>Aerospace operations learning simulation</small></div></div><div class="nav"><span class="chip">Stage <b id="navStage">Home</b></span><span class="chip">Elapsed <b id="navTime">00:00</b></span><span class="chip">Progress <b id="navProgress">0/5</b></span></div></header>
+  <main id="main">
+    <section id="homeScreen" class="screen active"><article class="hero card"><div class="hero-copy"><div class="eyebrow">Five systems offline. One route to recovery.</div><h1>Trace the risk.<br>Restore the system.</h1><p>A sequential escape-room mission in which your team must recover five sustainability systems: prioritisation, impact pathways, evidence, action hierarchy and governance.</p><div class="facts"><span class="fact">5 locked rooms</span><span class="fact">25–35 minutes</span><span class="fact">Solo or team play</span><span class="fact">Theory after every room</span></div><div class="actions"><button id="briefBtn" class="btn btn-primary">Open mission briefing</button></div><div id="resumeCard" class="resume-card"><strong>Mission in progress</strong><p id="resumeText"></p><button id="resumeBtn" class="btn btn-secondary">Resume mission</button></div></div></article></section>
 
-    <section class="screen active" id="screen-home">
-      <div class="hero card">
-        <div class="hero-copy">
-          <div class="eyebrow">Interactive sustainability challenge</div>
-          <h1>Sustainable Aviation.<br>Restore balance.</h1>
-          <p>A premium escape-room experience for Airbus teams. Solve five interconnected sustainability and nature challenges, unlock the secret clues and reactivate the Green Corridor around the Getafe site.</p>
-          <div class="actions">
-            <button class="btn btn-primary" id="btnStart">Start mission</button>
-            <button class="btn btn-secondary" id="btnIntro">View mission brief</button>
-          </div>
-          <div class="stats">
-            <div class="stat"><strong>5</strong><span>themed rooms</span></div>
-            <div class="stat"><strong>60</strong><span>minutes of play</span></div>
-            <div class="stat"><strong>4–6</strong><span>players per team</span></div>
-            <div class="stat"><strong>1</strong><span>final restoration code</span></div>
-          </div>
-        </div>
-        <div class="hero-visual">
-          <div class="dashboard">
-            <div class="main-panel">
-              <div class="hud"><span>Mission mode</span><span>5 clues</span><span>Green Corridor</span></div>
-              <div class="mission-core"><div class="orb">🌿</div></div>
-              <div class="mission-copy">
-                <span class="mini">Sustainability in industrial settings</span>
-                <h3>Learn through action, solve as a team</h3>
-                <p>From habitat loss and invisible pollution to ecological balance and anti-greenwashing decisions, each room converts nature-related sustainability learning into a collaborative challenge.</p>
-              </div>
-            </div>
-            <div class="stack">
-              <div class="side-card">
-                <div class="side-icon">🧩</div>
-                <h4>Five rooms</h4>
-                <p>Habitat loss, invisible pollution, species detectives, ecosystem balance and real action vs greenwashing.</p>
-              </div>
-              <div class="side-card">
-                <div class="side-icon">🔐</div>
-                <h4>Unlock the code</h4>
-                <p>Each completed room reveals one clue. Collect them all to generate your final ecosystem-restoration keyword.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+    <section id="briefScreen" class="screen"><article class="brief card"><div class="eyebrow">Mandatory mission briefing</div><h1>The dashboard failed. Your reasoning is the recovery key.</h1><p class="brief-lead">A simulated project decision has fragmented the sustainability picture into five separate systems. Recover them in order. Each solved room reveals one letter and unlocks a technical debrief. Combine the letters to enter the final recovery code.</p><div class="brief-grid"><div class="brief-panel"><h2>How to play</h2><ol><li>Enter Room 1. Later rooms remain locked.</li><li>Complete every field and validate your response.</li><li>If the answer is wrong, use the targeted feedback or reveal the optional hint.</li><li>After solving, read the debrief before entering the next room.</li><li>Combine the five clues in room order and enter the final code.</li></ol><p>Your progress is stored in this browser. There is no time penalty: the timer records duration only.</p></div><div class="brief-panel"><h2>Mission route</h2><div class="route-preview"><div class="route-row"><b>1</b><div><strong>Risk Triage</strong><span>Prioritise by severity, exposure and reversibility.</span></div></div><div class="route-row"><b>2</b><div><strong>Impact Routes</strong><span>Connect pressures, pathways and receptors.</span></div></div><div class="route-row"><b>3</b><div><strong>Evidence Lab</strong><span>Distinguish outcome evidence from weak support.</span></div></div><div class="route-row"><b>4</b><div><strong>Action Hierarchy</strong><span>Avoid, reduce, restore and transform.</span></div></div><div class="route-row"><b>5</b><div><strong>Control Room</strong><span>Build a decision-ready plan.</span></div></div></div></div></div><div class="notice">These are simulated learning scenarios. They do not represent official Airbus procedures, facilities or positions.</div><div class="actions"><button id="beginBtn" class="btn btn-primary">Enter Room 1</button><button id="briefHomeBtn" class="btn btn-ghost">Back home</button></div></article></section>
 
-    <section class="screen" id="screen-mission">
-      <div class="mission-layout">
-        <aside class="sidebar">
-          <div class="eyebrow">Mission progress</div>
-          <h3>Escape room control deck</h3>
-          <p>Your task is to stop biodiversity loss around Airbus Getafe by solving five connected challenges. Each completed room reveals a clue.</p>
-          <div class="room-list" id="roomList"></div>
-          <div class="clue-panel">
-            <div class="eyebrow">Unlocked clues</div>
-            <div class="clues" id="clues"></div>
-          </div>
-        </aside>
+    <section id="missionScreen" class="screen mission"><div class="mission-grid"><aside class="sidebar card"><div class="eyebrow">Sequential route</div><h2>Recovery deck</h2><p>Solve each system to release its clue. Locked rooms cannot be bypassed.</p><div class="progress"><div id="progressBar"></div></div><div id="route" class="route"></div><div class="mission-stats"><div class="mission-stat"><strong id="attemptsStat">0</strong><span>Attempts</span></div><div class="mission-stat"><strong id="hintsStat">0</strong><span>Hints used</span></div></div><div class="side-actions"><button id="missionBriefBtn" class="btn btn-ghost">Mission briefing</button><button id="saveExitBtn" class="btn btn-ghost">Save and exit</button><button id="resetBtn" class="btn btn-ghost">Restart mission</button></div></aside><article id="workspace" class="workspace card"><div class="room-head"><div><div id="roomEyebrow" class="eyebrow"></div><h1 id="roomTitle"></h1><p id="roomDescription"></p><div id="roomTags" class="tags"></div></div><div id="clueOrb" class="clue-orb">🔒</div></div><div id="puzzle" class="puzzle"><h2 id="puzzleTitle"></h2><p id="puzzleInstructions"></p><div id="puzzleRows" class="rows"></div><div class="puzzle-actions"><button id="validateBtn" class="btn btn-primary">Validate response</button><button id="hintBtn" class="btn btn-ghost">Reveal hint</button></div><div id="hintBox" class="hint"></div><div id="statusBox" class="status" aria-live="polite"></div></div><div id="debrief" class="debrief" tabindex="-1"><div class="debrief-head"><div id="clueLetter" class="clue"></div><div><h2 id="debriefTitle"></h2><p id="debriefSummary"></p></div></div><div class="learning-grid"><div class="learning-box"><strong>What to retain</strong><ul id="debriefBullets"></ul></div><div class="learning-box"><strong>Operational application</strong><span id="debriefAction"></span></div></div><div class="source">Conceptual reference: <a id="debriefSource" target="_blank" rel="noopener noreferrer"></a></div><div class="actions" style="margin-top:14px"><button id="nextRoomBtn" class="btn btn-secondary">Enter next room</button></div></div><div id="codePanel" class="code-panel"><h2>All five systems recovered</h2><p>Enter the five letters in room order. The answer describes the discipline that connects every room.</p><div class="code-entry"><input id="finalCodeInput" maxlength="5" autocomplete="off" spellcheck="false" aria-label="Five-letter recovery code"><button id="unlockBtn" class="btn btn-primary">Unlock system</button></div><div id="codeStatus" class="status" aria-live="polite"></div></div></article></div></section>
 
-        <main class="workspace">
-          <div class="workspace-head">
-            <div>
-              <div class="eyebrow" id="roomEyebrow">Mission brief</div>
-              <h2 id="roomTitle">Welcome to the operation</h2>
-              <p id="roomDescription">Read the challenge carefully, solve it as a team and validate your answer to unlock the clue.</p>
-            </div>
-            <div class="room-tags" id="roomTags"></div>
-          </div>
-          <div class="progress"><div id="progressBar" style="width:0%"></div></div>
-          <div id="roomContent"></div>
-        </main>
-      </div>
-    </section>
+    <section id="resultsScreen" class="screen"><article class="results card"><div class="eyebrow">Recovery complete</div><h1>You restored the decision system.</h1><p class="results-lead">The escape code is not a slogan. <strong>TRACE</strong> is the discipline used throughout the mission: trace the pressure, pathway, evidence, response and accountability before making a sustainability claim or operational decision.</p><div class="code-final">TRACE</div><div class="result-grid"><div class="result-card"><strong>5/5</strong><span>Systems recovered</span></div><div class="result-card"><strong id="resultTime">00:00</strong><span>Completion time</span></div><div class="result-card"><strong id="resultAttempts">0</strong><span>Attempts</span></div><div class="result-card"><strong id="resultHints">0</strong><span>Hints used</span></div></div><h2>Your learning route</h2><div id="learningMap" class="learning-map"></div><div class="actions"><button id="reviewBtn" class="btn btn-secondary">Review solved rooms</button><button id="playAgainBtn" class="btn btn-primary">Play again</button><button id="resultsHomeBtn" class="btn btn-ghost">Return home</button></div><div class="references"><strong>Methodological basis:</strong> the rooms use TNFD's LEAP logic, SBTN's AR3T action framework and the environmental topics and evidence principles reflected in the ESRS. Official references: <a href="https://tnfd.global/publication/additional-guidance-on-assessment-of-nature-related-issues-the-leap-approach/" target="_blank" rel="noopener">TNFD LEAP</a>, <a href="https://sciencebasedtargetsnetwork.org/companies/take-action/act/" target="_blank" rel="noopener">SBTN AR3T</a> and <a href="https://eur-lex.europa.eu/eli/reg_del/2023/2772/oj" target="_blank" rel="noopener">Commission Delegated Regulation (EU) 2023/2772</a>.</div></article></section>
+  </main>
+</div>
 
-    <section class="screen" id="screen-results">
-      <div class="results">
-        <div class="score-card card">
-          <div class="eyebrow">Mission completed</div>
-          <h2 style="font-size:52px;line-height:.94;margin-top:10px">Green Corridor restored</h2>
-          <div class="score-big" id="scoreValue">5/5</div>
-          <div class="level" id="scoreLevel">Ecosystem restoration team</div>
-          <p id="scoreText" style="max-width:660px;line-height:1.9;color:rgba(243,248,255,.82)">You solved the five nature-related rooms and rebuilt a coherent restoration pathway for the site.</p>
-          <div class="actions">
-            <button class="btn btn-primary" id="btnRestart">Play again</button>
-            <button class="btn btn-secondary" id="btnBackMission">Review mission</button>
-          </div>
-          <div class="footnote">This English version is built from the project’s historical escape-room structure and facilitator manual so you can keep a dedicated EN version for the English Biodiverso community.</div>
-        </div>
-        <div class="card" style="padding:24px">
-          <div class="eyebrow">Final summary</div>
-          <h3 style="font-size:34px;margin:8px 0 16px">Unlocked restoration code</h3>
-          <div class="panel" style="margin-bottom:16px">
-            <div class="small">Secret keyword</div>
-            <div id="finalCode" style="font-size:54px;font-family:Manrope,Inter,sans-serif;letter-spacing:-.06em;margin-top:8px">VERDE</div>
-          </div>
-          <div class="summary-grid" id="summaryGrid"></div>
-        </div>
-      </div>
-    </section>
-  </div>
+<script>
+const SOURCES={TNFD:{label:"TNFD · LEAP approach",url:"https://tnfd.global/publication/additional-guidance-on-assessment-of-nature-related-issues-the-leap-approach/"},SBTN:{label:"SBTN · AR3T action framework",url:"https://sciencebasedtargetsnetwork.org/companies/take-action/act/"},ESRS:{label:"EUR-Lex · European Sustainability Reporting Standards",url:"https://eur-lex.europa.eu/eli/reg_del/2023/2772/oj"}};
+const ROOMS=[
+{id:1,clue:"T",name:"Risk Triage",eyebrow:"Room 1 · Prioritisation",tags:["Severity","Exposure","Reversibility"],description:"Rank four issues using urgency, potential harm, exposure pathway and reversibility—not visibility or convenience.",puzzleTitle:"Set the response order",instructions:"Assign each issue a unique priority from 1 (respond now) to 4 (monitor in routine planning). Use every rank once.",hint:"Start with the active source–pathway–receptor chain. Then consider irreversible harm before longer-term data improvement or communication.",options:["1 · Respond now","2 · High priority","3 · Medium priority","4 · Routine priority"],rows:[{label:"Chemical fluid entering a stormwater drain as rain begins",detail:"An active release, open pathway and downstream receptor are present.",answer:0},{label:"Earthworks planned beside an unsurveyed potentially sensitive habitat",detail:"Work has not started; a local pause and rapid ecological check remain possible.",answer:1},{label:"Site-specific supplier water data missing from a future portfolio screening",detail:"A disclosed sector estimate is available for the initial screen.",answer:2},{label:"Proposal for an internal sustainability poster with no performance claim",detail:"No operational or environmental impact is attached to the proposal.",answer:3}],feedback:"Revisit the risk chain: active exposure comes first, followed by potentially irreversible harm, then a manageable data gap and finally a low-risk communication activity.",summary:"Risk triage is a reasoned allocation of attention, not a reaction to the loudest issue.",bullets:["Severity and irreversibility can outweigh low probability.","An active pathway to a sensitive receptor requires rapid containment.","Document assumptions so priorities can change when evidence changes."],action:"Use common criteria—severity, likelihood, exposure, reversibility, urgency and control effectiveness—then assign an owner and response time to every risk, not only the highest one.",source:"TNFD"},
+{id:2,clue:"R",name:"Impact Routes",eyebrow:"Room 2 · Cause and effect",tags:["Pressure","Pathway","Receptor"],description:"Match each operational pressure to its most direct ecological pathway or effect.",puzzleTitle:"Trace the four impact pathways",instructions:"Choose the most direct consequence for each pressure. Each effect can be used once.",hint:"Do not select a broad sustainability issue. Follow what physically changes between the source and the receptor.",options:["Disrupted rhythms and activity in nocturnal fauna","Reduced porosity, infiltration and soil-biota activity","Toxic exposure of aquatic organisms through runoff","Spread of invasive seeds to new ground"],rows:[{label:"Unshielded night lighting beside a habitat corridor",detail:"Consider spectrum, direction and timing.",answer:0},{label:"Repeated heavy-vehicle access across wet soil",detail:"Consider physical soil structure.",answer:1},{label:"Chemical residues washed into surface drainage",detail:"Consider where the drainage discharges.",answer:2},{label:"Contaminated soil carried on machinery between work areas",detail:"Consider biological material transported with soil.",answer:3}],feedback:"One or more pathways are mismatched. Trace the direct physical or biological mechanism before considering secondary effects.",summary:"An impact becomes manageable when the source, pathway and receptor are explicit.",bullets:["A pressure alone does not describe exposure.","Breaking the pathway may limit harm while the source is controlled.","Monitoring should target the receptor and mechanism identified."],action:"Build a simple source–pathway–receptor model for changes and incidents. Use it to locate controls, sampling points, escalation thresholds and residual uncertainty.",source:"TNFD"},
+{id:3,clue:"A",name:"Evidence Lab",eyebrow:"Room 3 · Assurance",tags:["Data quality","Claims","Uncertainty"],description:"Classify the strength of evidence behind five proposed sustainability statements.",puzzleTitle:"Audit the evidence chain",instructions:"Decide whether each item is outcome evidence, supporting evidence or insufficient for the stated claim.",hint:"Ask what the evidence actually proves. Participation and photographs may prove an activity occurred, but not that ecological condition improved.",options:["Outcome evidence","Supporting / partial evidence","Insufficient for the claim"],rows:[{label:"Repeated before–after ecological monitoring using a documented method and reference area",detail:"Used to claim that ecological condition changed after the intervention.",answer:0},{label:"A disclosed sector-average water estimate with known geographic limitations",detail:"Used for initial supplier screening while primary data is requested.",answer:1},{label:"One attractive, undated photograph of planted vegetation",detail:"Used to claim a sustained improvement in habitat quality.",answer:2},{label:"A scoped independent assurance report testing the controls behind reported data",detail:"Used to support the reliability of the specified dataset.",answer:0},{label:"Two hundred employees attended a planting event",detail:"Used to claim that local species populations increased.",answer:2}],feedback:"Check the claim, not just the document. Strong evidence must be relevant to the stated outcome; partial evidence may support screening; activity evidence cannot prove ecological impact.",summary:"Evidence quality depends on relevance, method, scope and uncertainty—not on how persuasive the visual looks.",bullets:["Separate activity, output, outcome and impact.","Label estimates and test whether uncertainty changes the decision.","A claim must not exceed the evidence that supports it."],action:"For every indicator or public statement, record method, boundary, period, baseline, data owner, quality controls, limitations and assurance status.",source:"ESRS"},
+{id:4,clue:"C",name:"Action Hierarchy",eyebrow:"Room 4 · Response",tags:["Avoid","Reduce","Restore","Transform"],description:"Place each response at the correct level of the action hierarchy.",puzzleTitle:"Build the response sequence",instructions:"Classify each measure by the primary action it represents. The order reflects preference, not a licence to skip earlier stages.",hint:"Avoid prevents the pressure; reduce limits it; restore repairs affected systems; transform changes the wider rules or incentives.",options:["Avoid","Reduce","Restore / regenerate","Transform"],rows:[{label:"Relocate an extension to retain a temporary wetland",detail:"The impact is removed through the design alternative.",answer:0},{label:"Shield, dim and time lighting while maintaining required safety levels",detail:"The operational need remains, but the pressure is limited.",answer:1},{label:"Reinstate soil structure and native vegetation after temporary works",detail:"The affected area is placed on a recovery trajectory.",answer:2},{label:"Embed nature criteria in supplier standards, design gates and incentives",detail:"The system governing repeated decisions is changed.",answer:3}],feedback:"Review the primary purpose of each response: prevent, limit, repair or change the wider system.",summary:"The action hierarchy prevents restoration or communication from being used as a substitute for avoidable harm.",bullets:["Avoidance is preferred where design alternatives exist.","Reduction requires verification of residual pressure.","Restoration needs a reference, trajectory and adaptive monitoring."],action:"Document alternatives early, define residual impacts after controls and assign measurable restoration or transformation outcomes rather than relying on activity counts.",source:"SBTN"},
+{id:5,clue:"E",name:"Control Room",eyebrow:"Room 5 · Governance",tags:["Targets","Ownership","Integrity"],description:"Select the decision-ready option for each element of a sustainability action plan.",puzzleTitle:"Authorise the recovery plan",instructions:"Choose the option that creates accountable action and evidence without overstating the outcome.",hint:"A robust plan connects baseline, target, owner, pressure and state indicators, trigger thresholds and proportionate communication.",optionsByRow:true,rows:[{label:"Target",detail:"What will the plan commit to?",options:["Support nature across the site","Install 20 habitat features","Reduce the mapped night-light footprint in the priority corridor by 30% from the 2026 baseline by Q4 2027"],answer:2},{label:"Accountability",detail:"Who owns delivery?",options:["Everyone collectively","The sustainability team alone","An accountable executive with named operational owners and escalation routes"],answer:2},{label:"Indicators",detail:"How will performance be understood?",options:["Number of posts published","Budget spent only","Implementation, pressure and ecological-state indicators with methods and thresholds"],answer:2},{label:"Management trigger",detail:"When will the team adjust the plan?",options:["Only after an external complaint","At a defined threshold or when monitoring shows the expected trajectory is not being achieved","At the end of five years regardless of results"],answer:1},{label:"Communication",detail:"What can be claimed after installing measures but before outcome monitoring?",options:["The site has achieved net positive impact","The measures were installed; outcomes will be evaluated against the stated baseline and monitoring plan","The action offsets every operational impact"],answer:1}],feedback:"At least one plan element lacks a measurable outcome, clear accountability, a decision trigger or claim discipline.",summary:"A decision-ready plan links ambition to accountability, controls, evidence and transparent communication.",bullets:["Targets need baselines, deadlines, boundaries and owners.","Indicators should connect action to pressure and ecological response.","Communication must distinguish delivery from demonstrated outcome."],action:"Approve a roadmap only when resources, responsibilities, control points, data quality, review thresholds and disclosure wording are explicit.",source:"ESRS"}
+];
 
-  <script>
-    const rooms = [
-      {
-        id: 1,
-        key: 'H',
-        title: 'Room 1 · Habitat loss',
-        eyebrow: 'Rank the pressure',
-        tags: ['Human impact', 'Site context', 'Numeric clue'],
-        description: 'Order human actions from highest to lowest biodiversity impact. The three most harmful actions generate the numeric code for this room.',
-        hint: 'Think about fragmentation, sealing and direct habitat removal before restorative actions.',
-        render: renderRoom1,
-        validate: validateRoom1,
-      },
-      {
-        id: 2,
-        key: 'A',
-        title: 'Room 2 · Invisible pollution',
-        eyebrow: 'Match cause and effect',
-        tags: ['Noise', 'Light', 'Chemicals'],
-        description: 'Connect each pollution type with the biodiversity effect it most directly causes. Three correct combinations unlock the clue.',
-        hint: 'Match the most direct ecological effect, not a general environmental issue.',
-        render: renderRoom2,
-        validate: validateRoom2,
-      },
-      {
-        id: 3,
-        key: 'B',
-        title: 'Room 3 · Nature detectives',
-        eyebrow: 'Classify the species',
-        tags: ['Native', 'Exotic', 'Invasive'],
-        description: 'Classify species and identify whether their estimated ecological effect is positive, neutral or negative. Four correct identifications are enough to progress.',
-        hint: 'Native species adapted to the region often support local ecological relationships better.',
-        render: renderRoom3,
-        validate: validateRoom3,
-      },
-      {
-        id: 4,
-        key: 'I',
-        title: 'Room 4 · Ecosystem in balance',
-        eyebrow: 'Rebuild the web',
-        tags: ['Ecological links', 'Species roles', 'Habitat function'],
-        description: 'Select the ecological relationships that would make the ecosystem functional and realistic. At least five key links are needed.',
-        hint: 'Look for realistic relations involving pollination, refuge, pest control and water dependence.',
-        render: renderRoom4,
-        validate: validateRoom4,
-      },
-      {
-        id: 5,
-        key: 'T',
-        title: 'Room 5 · The solution is in our hands',
-        eyebrow: 'Real action vs greenwashing',
-        tags: ['Action plan', 'Real impact', 'Greenwashing filter'],
-        description: 'Choose the six actions that truly help biodiversity and discard the symbolic or misleading ones. The selected actions reveal the last clue.',
-        hint: 'Prefer habitat improvement, training and ecological management over cosmetic gestures.',
-        render: renderRoom5,
-        validate: validateRoom5,
-      }
-    ];
+const $=id=>document.getElementById(id),screens=[$("homeScreen"),$("briefScreen"),$("missionScreen"),$("resultsScreen")];
+const state={current:1,solved:{},attempts:0,hints:0,startedAt:null,elapsed:0,timer:null,finished:false};
+function show(screen,label){screens.forEach(s=>s.classList.toggle("active",s===screen));$("navStage").textContent=label;scrollTo({top:0,behavior:"smooth"})}
+function elapsedSeconds(){return state.startedAt?state.elapsed+Math.floor((Date.now()-state.startedAt)/1000):state.elapsed}
+function fmt(sec){const m=Math.floor(sec/60),s=sec%60;return `${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`}
+function solvedCount(){return Object.keys(state.solved).length}
+function updateHud(){$("navTime").textContent=fmt(elapsedSeconds());$("navProgress").textContent=`${solvedCount()}/5`;$("attemptsStat").textContent=state.attempts;$("hintsStat").textContent=state.hints;$("progressBar").style.width=`${solvedCount()/5*100}%`}
+function save(){localStorage.setItem("sustainabilityEscapeEN",JSON.stringify({current:state.current,solved:state.solved,attempts:state.attempts,hints:state.hints,elapsed:elapsedSeconds(),finished:state.finished}));updateResume()}
+function readSave(){try{return JSON.parse(localStorage.getItem("sustainabilityEscapeEN"))}catch(e){localStorage.removeItem("sustainabilityEscapeEN");return null}}
+function updateResume(){const s=readSave(),card=$("resumeCard");if(s&&Object.keys(s.solved||{}).length<5&&!s.finished){card.classList.add("show");$("resumeText").textContent=`Room ${s.current} · ${Object.keys(s.solved||{}).length}/5 systems recovered · ${fmt(s.elapsed||0)}`}else card.classList.remove("show")}
+function startClock(){clearInterval(state.timer);if(!state.startedAt)state.startedAt=Date.now();state.timer=setInterval(updateHud,1000)}
+function newMission(){clearInterval(state.timer);Object.assign(state,{current:1,solved:{},attempts:0,hints:0,startedAt:Date.now(),elapsed:0,timer:null,finished:false});localStorage.removeItem("sustainabilityEscapeEN");startClock();renderRoom()}
+function resumeMission(){const s=readSave();if(!s)return newMission();Object.assign(state,s,{startedAt:Date.now(),timer:null});startClock();renderRoom()}
+function freezeClock(){state.elapsed=elapsedSeconds();state.startedAt=null;clearInterval(state.timer);updateHud()}
+function openBrief(){freezeClock();const s=readSave(),hasProgress=s&&Object.keys(s.solved||{}).length<5&&!s.finished;$("beginBtn").textContent=hasProgress?"Return to current room":"Enter Room 1";show($("briefScreen"),"Briefing")}
+function beginFromBrief(){const s=readSave();if(s&&Object.keys(s.solved||{}).length<5&&!s.finished)resumeMission();else newMission()}
+function maxUnlocked(){for(let i=1;i<=5;i++)if(!state.solved[i])return i;return 5}
+function buildRoute(){const route=$("route"),unlocked=maxUnlocked();route.innerHTML="";ROOMS.forEach(r=>{const solved=!!state.solved[r.id],available=solved||r.id<=unlocked,b=document.createElement("button");b.className=`room-link${r.id===state.current?" active":""}${solved?" solved":""}`;b.disabled=!available;b.innerHTML=`<span class="num">${solved?"✓":r.id}</span><span><strong>${r.name}</strong><small>${solved?`Solved · clue ${r.clue}`:available?"Available":"Locked"}</small></span><span class="lock">${solved?r.clue:available?"→":"🔒"}</span>`;if(available)b.onclick=()=>{state.current=r.id;save();renderRoom()};route.appendChild(b)})}
+function renderRoom(){show($("missionScreen"),`Room ${state.current}`);startClock();buildRoute();updateHud();const r=ROOMS[state.current-1];$("roomEyebrow").textContent=r.eyebrow;$("roomTitle").textContent=r.name;$("roomDescription").textContent=r.description;$("roomTags").innerHTML=r.tags.map(x=>`<span class="tag">${x}</span>`).join("");$("clueOrb").textContent=state.solved[r.id]?r.clue:"🔒";$("puzzleTitle").textContent=r.puzzleTitle;$("puzzleInstructions").textContent=r.instructions;$("hintBox").textContent=r.hint;$("hintBox").className="hint";$("statusBox").className="status";$("debrief").className="debrief";$("codePanel").className="code-panel";$("puzzle").style.display=state.solved[r.id]?"none":"block";const rows=$("puzzleRows");rows.innerHTML="";r.rows.forEach((row,i)=>{const el=document.createElement("div");el.className="puzzle-row";const opts=(r.optionsByRow?row.options:r.options).map((o,j)=>`<option value="${j}">${o}</option>`).join("");el.innerHTML=`<div><strong>${row.label}</strong><span>${row.detail}</span></div><select data-row="${i}" aria-label="Response for ${row.label}"><option value="">Choose…</option>${opts}</select>`;rows.appendChild(el)});if(state.solved[r.id])renderDebrief(r);save()}
+function validate(){const r=ROOMS[state.current-1],selects=[...$("puzzleRows").querySelectorAll("select")];if(selects.some(s=>s.value===""))return status(false,"Complete every field before validating.");if(r.id===1&&new Set(selects.map(s=>s.value)).size!==selects.length)return status(false,"Each priority rank must be used exactly once.");state.attempts++;const correct=selects.every((s,i)=>Number(s.value)===r.rows[i].answer);if(!correct){save();return status(false,r.feedback)}state.solved[r.id]=true;status(true,"System recovered. Read the technical debrief before moving on.");$("puzzle").style.display="none";$("clueOrb").textContent=r.clue;save();buildRoute();renderDebrief(r)}
+function status(ok,text){const s=$("statusBox");s.className=`status show ${ok?"ok":"ko"}`;s.textContent=text;updateHud()}
+function revealHint(){if(!$("hintBox").classList.contains("show")){state.hints++;$("hintBox").classList.add("show");save()} }
+function renderDebrief(r){const d=$("debrief"),src=SOURCES[r.source];d.className="debrief show";$("clueLetter").textContent=r.clue;$("debriefTitle").textContent=`Clue ${r.clue} · ${r.name} recovered`;$("debriefSummary").textContent=r.summary;$("debriefBullets").innerHTML=r.bullets.map(x=>`<li>${x}</li>`).join("");$("debriefAction").textContent=r.action;$("debriefSource").textContent=src.label;$("debriefSource").href=src.url;if(r.id<5){$("nextRoomBtn").hidden=false;$("nextRoomBtn").textContent=`Enter Room ${r.id+1}`;$("nextRoomBtn").onclick=()=>{state.current=r.id+1;save();renderRoom()}}else{$("nextRoomBtn").hidden=true;$("codePanel").className="code-panel show"}setTimeout(()=>d.focus(),40)}
+function checkCode(){const value=$("finalCodeInput").value.trim().toUpperCase(),s=$("codeStatus");if(value!=="TRACE"){s.className="status show ko";s.textContent="The code is not correct. Read the five clues in room order.";return}state.finished=true;freezeClock();save();renderResults()}
+function renderResults(){freezeClock();show($("resultsScreen"),"Complete");$("resultTime").textContent=fmt(state.elapsed);$("resultAttempts").textContent=state.attempts;$("resultHints").textContent=state.hints;$("learningMap").innerHTML=ROOMS.map(r=>`<div class="learning-card"><b>${r.clue}</b><strong>${r.name}</strong><span>${r.summary}</span></div>`).join("");localStorage.removeItem("sustainabilityEscapeEN");updateResume()}
+function saveExit(){freezeClock();save();show($("homeScreen"),"Home")}
+function confirmReset(){if(confirm("Restart the mission and erase saved progress?"))newMission()}
 
-    const room1Data = [
-      { text: 'Urbanisation of a natural patch', impact: 5 },
-      { text: 'Soil sealing and hard paving', impact: 4 },
-      { text: 'Eliminating spontaneous vegetation', impact: 3 },
-      { text: 'Introducing diverse native green areas', impact: 2 },
-      { text: 'Ecological restoration and reforestation', impact: 1 }
-    ];
-
-    const room2Data = [
-      { pollution: 'Noise pollution', correct: 'Disturbs fauna communication, orientation and breeding behaviour' },
-      { pollution: 'Light pollution', correct: 'Disrupts circadian rhythms, nocturnal activity and insect behaviour' },
-      { pollution: 'Chemical pollution', correct: 'Damages plants, soil life and non-target organisms through contamination' }
-    ];
-    const room2Options = [
-      'Disturbs fauna communication, orientation and breeding behaviour',
-      'Disrupts circadian rhythms, nocturnal activity and insect behaviour',
-      'Damages plants, soil life and non-target organisms through contamination',
-      'Creates more habitat connectivity',
-      'Improves pollination automatically'
-    ];
-
-    const room3Data = [
-      { species: 'Holm oak (Quercus ilex)', type: 'Native', impact: 'Positive', note: 'Mediterranean tree that provides food and refuge.' },
-      { species: 'Iberian honey bee', type: 'Native', impact: 'Positive', note: 'Key pollinator in local ecological networks.' },
-      { species: 'Decorative palm introduced in landscaped areas', type: 'Exotic non-invasive', impact: 'Neutral', note: 'Introduced species with limited local ecological value in this context.' },
-      { species: 'Ruddy duck in a protected wetland context', type: 'Invasive', impact: 'Negative', note: 'Introduced species with significant ecological pressure in Europe.' },
-      { species: 'Common swallow', type: 'Native', impact: 'Positive', note: 'Linked to environmental quality and insect availability.' },
-      { species: 'Tree of heaven (Ailanthus altissima)', type: 'Invasive', impact: 'Negative', note: 'Highly invasive in many urban and peri-urban settings.' }
-    ];
-    const room3TypeOptions = ['Native', 'Exotic non-invasive', 'Invasive'];
-    const room3ImpactOptions = ['Positive', 'Neutral', 'Negative'];
-
-    const room4Data = [
-      { text: 'The Iberian bee pollinates the field thistle.', correct: true },
-      { text: 'The temporary pond supports the natterjack toad.', correct: true },
-      { text: 'The dry-stone wall provides refuge to small fauna.', correct: true },
-      { text: 'The bat helps regulate mosquito populations.', correct: true },
-      { text: 'The holm oak offers food and shelter to many species.', correct: true },
-      { text: 'The red fox pollinates the iris.', correct: false },
-      { text: 'The swallow depends directly on asphalt for nesting habitat.', correct: false },
-      { text: 'Chemical overuse increases biodiversity resilience.', correct: false }
-    ];
-
-    const room5Data = [
-      { text: 'Plant native species adapted to the local climate', correct: true },
-      { text: 'Install insect hotels in landscaped areas', correct: true },
-      { text: 'Remove invasive species from green spaces', correct: true },
-      { text: 'Preserve old structures and cavities as fauna shelters', correct: true },
-      { text: 'Reduce the use of pesticides and chemical fertilisers', correct: true },
-      { text: 'Train workers on local biodiversity', correct: true },
-      { text: 'Paint animal murals on external walls', correct: false },
-      { text: 'Launch a photo campaign with wildlife images only', correct: false },
-      { text: 'Label sealed asphalt areas as green zones', correct: false },
-      { text: 'Use decorative exotic palms as a biodiversity symbol', correct: false },
-      { text: 'Place unrelated indoor plants as the main action', correct: false },
-      { text: 'Clean outdoor areas with scented “eco” products and call it restoration', correct: false }
-    ];
-
-    const state = {
-      currentRoom: 1,
-      solved: {},
-      clues: [],
-      roomStatus: {}
-    };
-
-    const screenHome = document.getElementById('screen-home');
-    const screenMission = document.getElementById('screen-mission');
-    const screenResults = document.getElementById('screen-results');
-    const navStage = document.getElementById('navStage');
-    const navContext = document.getElementById('navContext');
-
-    function setScreen(name){
-      [screenHome, screenMission, screenResults].forEach(el => el.classList.remove('active'));
-      if(name === 'home') screenHome.classList.add('active');
-      if(name === 'mission') screenMission.classList.add('active');
-      if(name === 'results') screenResults.classList.add('active');
-      navStage.textContent = name === 'home' ? 'Home' : name === 'mission' ? 'Mission' : 'Results';
-      navContext.textContent = name === 'mission' ? rooms.find(r => r.id === state.currentRoom).title : 'Green Corridor';
-    }
-
-    function updateSidebar(){
-      const list = document.getElementById('roomList');
-      list.innerHTML = '';
-      rooms.forEach(room => {
-        const div = document.createElement('div');
-        div.className = 'room-item' + (room.id === state.currentRoom ? ' active' : '');
-        div.innerHTML = `<strong>${room.title}</strong><span>${state.solved[room.id] ? 'Solved · clue unlocked' : 'Pending room'}</span>`;
-        div.onclick = () => { state.currentRoom = room.id; renderMission(); };
-        list.appendChild(div);
-      });
-      const clues = document.getElementById('clues');
-      clues.innerHTML = state.clues.length ? state.clues.map(c => `<div class="clue">${c}</div>`).join('') : '<div class="small">No clues unlocked yet.</div>';
-      document.getElementById('progressBar').style.width = `${(state.clues.length / rooms.length) * 100}%`;
-    }
-
-    function renderMission(){
-      setScreen('mission');
-      updateSidebar();
-      const room = rooms.find(r => r.id === state.currentRoom);
-      document.getElementById('roomEyebrow').textContent = room.eyebrow;
-      document.getElementById('roomTitle').textContent = room.title;
-      document.getElementById('roomDescription').textContent = room.description;
-      const tags = document.getElementById('roomTags');
-      tags.innerHTML = room.tags.map(tag => `<div class="chip">${tag}</div>`).join('');
-      const content = document.getElementById('roomContent');
-      content.innerHTML = '';
-      room.render(content);
-    }
-
-    function unlockRoom(roomId){
-      if(!state.solved[roomId]){
-        state.solved[roomId] = true;
-        const room = rooms.find(r => r.id === roomId);
-        state.clues.push(room.key);
-      }
-      updateSidebar();
-      if(state.clues.length === rooms.length){
-        renderResults();
-      }
-    }
-
-    function renderStatus(container, ok, html){
-      let status = container.querySelector('.status');
-      if(!status){
-        status = document.createElement('div');
-        container.appendChild(status);
-      }
-      status.className = `status ${ok ? 'ok' : 'ko'}`;
-      status.innerHTML = html;
-    }
-
-    function renderRoom1(target){
-      const panel = document.createElement('div');
-      panel.className = 'panel';
-      panel.innerHTML = `
-        <h3>Order actions from highest to lowest biodiversity impact</h3>
-        <p>The three most harmful actions generate the code. Assign a rank from <strong>1</strong> (highest impact) to <strong>5</strong> (lowest impact / restorative).</p>
-        <div class="pair-board" id="room1Board"></div>
-        <div class="room-actions">
-          <button class="btn btn-primary" id="validateRoom1">Validate order</button>
-        </div>
-      `;
-      target.appendChild(panel);
-      const board = panel.querySelector('#room1Board');
-      room1Data.forEach((item, index) => {
-        const row = document.createElement('div');
-        row.className = 'pair-row';
-        row.innerHTML = `
-          <div><div class="label">Action ${index + 1}</div><div class="species-name">${item.text}</div></div>
-          <div>
-            <select data-index="${index}">
-              <option value="">Choose rank…</option>
-              <option value="1">1 · Highest impact</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
-              <option value="5">5 · Lowest impact / restorative</option>
-            </select>
-          </div>
-          <div class="small">Use each rank only once.</div>
-        `;
-        board.appendChild(row);
-      });
-      panel.querySelector('#validateRoom1').onclick = () => validateRoom1(panel);
-    }
-
-    function validateRoom1(panel){
-      const values = [...panel.querySelectorAll('select')].map(s => Number(s.value));
-      if(values.some(v => !v)) return renderStatus(panel, false, 'Complete all rankings before validating.');
-      const unique = new Set(values);
-      if(unique.size !== values.length) return renderStatus(panel, false, 'Each rank must be used only once.');
-      const correct = values.every((v, i) => v === room1Data[i].impact);
-      if(correct){
-        unlockRoom(1);
-        renderStatus(panel, true, 'Correct. The impact order is valid. The room clue is <strong>H</strong>.');
-      } else {
-        renderStatus(panel, false, 'Not yet. Review which actions destroy or fragment habitat more directly than restorative measures.');
-      }
-    }
-
-    function renderRoom2(target){
-      const panel = document.createElement('div');
-      panel.className = 'panel';
-      panel.innerHTML = `
-        <h3>Match each pollution type with its biodiversity effect</h3>
-        <p>Only the direct ecological match counts. Three correct combinations unlock the clue.</p>
-        <div class="pair-board" id="room2Board"></div>
-        <div class="room-actions"><button class="btn btn-primary" id="validateRoom2">Validate matches</button></div>
-      `;
-      target.appendChild(panel);
-      const board = panel.querySelector('#room2Board');
-      room2Data.forEach((item, index) => {
-        const row = document.createElement('div');
-        row.className = 'pair-row';
-        const options = room2Options.map(o => `<option value="${o.replace(/"/g,'&quot;')}">${o}</option>`).join('');
-        row.innerHTML = `
-          <div><div class="label">Pollution</div><div class="species-name">${item.pollution}</div></div>
-          <div><select data-index="${index}"><option value="">Choose the effect…</option>${options}</select></div>
-          <div class="small">Think about fauna, flora and biological rhythms.</div>
-        `;
-        board.appendChild(row);
-      });
-      panel.querySelector('#validateRoom2').onclick = () => validateRoom2(panel);
-    }
-
-    function validateRoom2(panel){
-      const selects = [...panel.querySelectorAll('select')];
-      if(selects.some(s => !s.value)) return renderStatus(panel, false, 'Complete the three matches before validating.');
-      const correct = selects.every((s, i) => s.value === room2Data[i].correct);
-      if(correct){
-        unlockRoom(2);
-        renderStatus(panel, true, 'Correct. The pollution pathways are consistent. The room clue is <strong>A</strong>.');
-      } else {
-        renderStatus(panel, false, 'Some matches are off. Review which impact is specific to noise, light and chemical pollution.');
-      }
-    }
-
-    function renderRoom3(target){
-      const panel = document.createElement('div');
-      panel.className = 'panel';
-      panel.innerHTML = `
-        <h3>Classify the species and estimate the ecological effect</h3>
-        <p>At least four correct identifications are enough to move forward. Aim for the full set.</p>
-        <div class="species-board" id="room3Board"></div>
-        <div class="room-actions"><button class="btn btn-primary" id="validateRoom3">Validate species analysis</button></div>
-      `;
-      target.appendChild(panel);
-      const board = panel.querySelector('#room3Board');
-      room3Data.forEach((item, index) => {
-        const row = document.createElement('div');
-        row.className = 'species-row';
-        row.innerHTML = `
-          <div>
-            <div class="label">Species ${index + 1}</div>
-            <div class="species-name">${item.species}</div>
-            <div class="small">${item.note}</div>
-          </div>
-          <div>
-            <div class="small">Classification</div>
-            <select data-kind="type" data-index="${index}">
-              <option value="">Choose…</option>
-              ${room3TypeOptions.map(o => `<option value="${o}">${o}</option>`).join('')}
-            </select>
-          </div>
-          <div>
-            <div class="small">Estimated impact</div>
-            <select data-kind="impact" data-index="${index}">
-              <option value="">Choose…</option>
-              ${room3ImpactOptions.map(o => `<option value="${o}">${o}</option>`).join('')}
-            </select>
-          </div>
-        `;
-        board.appendChild(row);
-      });
-      panel.querySelector('#validateRoom3').onclick = () => validateRoom3(panel);
-    }
-
-    function validateRoom3(panel){
-      const typeSelects = [...panel.querySelectorAll('select[data-kind="type"]')];
-      const impactSelects = [...panel.querySelectorAll('select[data-kind="impact"]')];
-      if([...typeSelects, ...impactSelects].some(s => !s.value)) return renderStatus(panel, false, 'Complete all species fields before validating.');
-      let correctCount = 0;
-      room3Data.forEach((item, i) => {
-        if(typeSelects[i].value === item.type && impactSelects[i].value === item.impact) correctCount++;
-      });
-      if(correctCount >= 4){
-        unlockRoom(3);
-        renderStatus(panel, true, `Good work. You achieved <strong>${correctCount}/6</strong> correct species identifications. The room clue is <strong>B</strong>.`);
-      } else {
-        renderStatus(panel, false, `You currently have <strong>${correctCount}/6</strong> correct identifications. You need at least 4 to progress.`);
-      }
-    }
-
-    function renderRoom4(target){
-      const panel = document.createElement('div');
-      panel.className = 'panel';
-      panel.innerHTML = `
-        <h3>Select the ecological links that create a functional ecosystem</h3>
-        <p>Choose the realistic relations only. You need at least five correct links and no false ecological claims.</p>
-        <div class="checkbox-list" id="room4List"></div>
-        <div class="room-actions"><button class="btn btn-primary" id="validateRoom4">Validate ecological web</button></div>
-      `;
-      target.appendChild(panel);
-      const list = panel.querySelector('#room4List');
-      room4Data.forEach((item, index) => {
-        const row = document.createElement('label');
-        row.className = 'checkbox';
-        row.innerHTML = `<input type="checkbox" data-index="${index}"><div><div class="species-name">${item.text}</div><div class="small">Mark only if the relationship is realistic and ecologically coherent.</div></div>`;
-        list.appendChild(row);
-      });
-      panel.querySelector('#validateRoom4').onclick = () => validateRoom4(panel);
-    }
-
-    function validateRoom4(panel){
-      const checked = [...panel.querySelectorAll('input[type="checkbox"]')].map(c => c.checked);
-      const falseSelected = room4Data.some((item, i) => checked[i] && !item.correct);
-      const trueSelected = room4Data.filter((item, i) => checked[i] && item.correct).length;
-      if(!falseSelected && trueSelected >= 5){
-        unlockRoom(4);
-        renderStatus(panel, true, `The ecosystem works. You selected <strong>${trueSelected}</strong> valid relationships without false links. The room clue is <strong>I</strong>.`);
-      } else {
-        renderStatus(panel, false, `Not yet. You currently have <strong>${trueSelected}</strong> valid selected links${falseSelected ? ' and at least one unrealistic relation' : ''}.`);
-      }
-    }
-
-    function renderRoom5(target){
-      const panel = document.createElement('div');
-      panel.className = 'panel';
-      panel.innerHTML = `
-        <h3>Choose the actions that are truly beneficial for biodiversity</h3>
-        <p>Select exactly six actions that would fit a serious biodiversity action plan. Avoid symbolic or misleading gestures.</p>
-        <div class="checkbox-list" id="room5List"></div>
-        <div class="room-actions"><button class="btn btn-primary" id="validateRoom5">Validate action plan</button></div>
-      `;
-      target.appendChild(panel);
-      const list = panel.querySelector('#room5List');
-      room5Data.forEach((item, index) => {
-        const row = document.createElement('label');
-        row.className = 'checkbox';
-        row.innerHTML = `<input type="checkbox" data-index="${index}"><div><div class="action-name">${item.text}</div><div class="small">Select this only if it creates real ecological value or meaningful learning.</div></div>`;
-        list.appendChild(row);
-      });
-      panel.querySelector('#validateRoom5').onclick = () => validateRoom5(panel);
-    }
-
-    function validateRoom5(panel){
-      const checked = [...panel.querySelectorAll('input[type="checkbox"]')].map(c => c.checked);
-      const selectedCount = checked.filter(Boolean).length;
-      if(selectedCount !== 6) return renderStatus(panel, false, `Select exactly 6 actions. You currently selected ${selectedCount}.`);
-      const correct = room5Data.every((item, i) => checked[i] === item.correct);
-      if(correct){
-        unlockRoom(5);
-        renderStatus(panel, true, 'Excellent. You separated real biodiversity action from greenwashing. The room clue is <strong>T</strong>.');
-      } else {
-        renderStatus(panel, false, 'Some selected actions are too cosmetic or misleading. Review what creates measurable ecological benefit.');
-      }
-    }
-
-    function renderResults(){
-      setScreen('results');
-      const code = state.clues.join('');
-      document.getElementById('scoreValue').textContent = `${state.clues.length}/5`;
-      document.getElementById('scoreLevel').textContent = state.clues.length === 5 ? 'Ecosystem restoration team' : 'Mission still in progress';
-      document.getElementById('scoreText').textContent = state.clues.length === 5
-        ? 'You solved the five nature-related rooms and completed a coherent route from diagnosis to ecological action in an industrial setting.'
-        : 'You unlocked part of the mission. Review the unresolved rooms and complete the restoration pathway.';
-      document.getElementById('finalCode').textContent = code || '—';
-      const grid = document.getElementById('summaryGrid');
-      grid.innerHTML = rooms.map(room => `
-        <div class="summary-card">
-          <div class="small">${room.title}</div>
-          <div style="font-size:28px;font-family:Manrope,Inter,sans-serif;margin-top:8px">${state.solved[room.id] ? 'Solved' : 'Pending'}</div>
-          <div class="footnote" style="margin-top:6px">Clue: ${state.solved[room.id] ? room.key : 'Locked'}</div>
-        </div>
-      `).join('');
-    }
-
-    function resetMission(){
-      state.currentRoom = 1;
-      state.solved = {};
-      state.clues = [];
-      state.roomStatus = {};
-      renderMission();
-    }
-
-    document.getElementById('btnStart').onclick = resetMission;
-    document.getElementById('btnIntro').onclick = resetMission;
-    document.getElementById('btnRestart').onclick = resetMission;
-    document.getElementById('btnBackMission').onclick = renderMission;
-
-    updateSidebar();
-  </script>
+$("briefBtn").onclick=openBrief;$("briefHomeBtn").onclick=()=>show($("homeScreen"),"Home");$("beginBtn").onclick=beginFromBrief;$("resumeBtn").onclick=resumeMission;$("validateBtn").onclick=validate;$("hintBtn").onclick=revealHint;$("missionBriefBtn").onclick=()=>{freezeClock();save();openBrief()};$("saveExitBtn").onclick=saveExit;$("resetBtn").onclick=confirmReset;$("unlockBtn").onclick=checkCode;$("finalCodeInput").addEventListener("keydown",e=>{if(e.key==="Enter")checkCode()});$("reviewBtn").onclick=()=>{state.current=1;renderRoom()};$("playAgainBtn").onclick=newMission;$("resultsHomeBtn").onclick=()=>show($("homeScreen"),"Home");window.addEventListener("beforeunload",()=>{if(state.startedAt&&!state.finished){freezeClock();save()}});updateResume();updateHud();
+</script>
 </body>
 </html>
